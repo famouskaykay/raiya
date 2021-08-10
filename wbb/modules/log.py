@@ -31,7 +31,7 @@ async def logs_chat(_, message):
 async def paste_log_neko(_, cq: CallbackQuery):
     if cq.from_user.id not in SUDOERS:
         return await cq.answer(
-            "Stop clicking at whichever thing you come across."
+            "wacha kufinya kila kitu msee."
         )
     async with aiofiles.open(log_file, mode="r") as f:
         link = await paste(await f.read())
