@@ -1,26 +1,3 @@
-"""
-MIT License
-
-Copyright (c) 2021 TheHamkerCat
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-"""
 from pyrogram import filters
 from pyrogram.types import Message
 
@@ -32,17 +9,17 @@ from wbb.utils.functions import restart
 
 __MODULE__ = "Sudo"
 __HELP__ = """
-**THIS MODULE IS ONLY FOR DEVS**
+**MODULI HII NI KWA AJILI YA DEVELOPERS TU**
 
-.useradd - To Add A User In Sudoers.
-.userdel - To Remove A User From Sudoers.
-.sudoers - To List Sudo Users.
+.useradd - Kuongeza Mtumiaji Katika Sudoers.
+.userdel - Kutoa Mtumiaji Katika Sudoers
+.sudoers - Kuorodhesha Watumiaji wa Sudo.
 
 **NOTE:**
 
-Never add anyone to sudoers unless you trust them,
-sudo users can do anything with your account, they
-can even delete your account.
+Wala msiongezee mwenye kufuru, isipo kuwa kwa kuamini.
+watumiaji wa sudo wanaweza kufanya chochote na akaunti yako,
+inaweza hata kufuta akaunti yako.
 """
 
 
@@ -55,27 +32,27 @@ async def useradd(_, message: Message):
     if not message.reply_to_message:
         return await edit_or_reply(
             message,
-            text="Reply to someone's message to add him to sudoers.",
+            text="Jibu ujumbe wa mtu wa kumongeza kwa sudoer.",
         )
     user_id = message.reply_to_message.from_user.id
     sudoers = await get_sudoers()
     if user_id in sudoers:
         return await edit_or_reply(
-            message, text="User is already in sudoers."
+            message, text="Mtumiaji tayari yuko katika sudoer."
         )
     if user_id == BOT_ID:
         return await edit_or_reply(
-            message, text="You can't add assistant bot in sudoers."
+            message, text="Huwezi kuongeza bot msaidizi katika sudoers."
         )
     added = await add_sudo(user_id)
     if added:
         await edit_or_reply(
             message,
-            text="Successfully added user in sudoers, Bot will be restarted now.",
+            text="Imefanikiwa kuongeza mtumiaji katika sudoers, Bot itaanzishwa upya sasa.",
         )
         return await restart(None)
     await edit_or_reply(
-        message, text="Something wrong happened, check logs."
+        message, text="Kitu kibaya kilitokea, angalia logs."
     )
 
 
@@ -88,22 +65,22 @@ async def userdel(_, message: Message):
     if not message.reply_to_message:
         return await edit_or_reply(
             message,
-            text="Reply to someone's message to remove him to sudoers.",
+            text="Jibu ujumbe wa mtu wa kumwondoa kwenye sudoers.",
         )
     user_id = message.reply_to_message.from_user.id
     if user_id not in await get_sudoers():
         return await edit_or_reply(
-            message, text="User is not in sudoers."
+            message, text="mtumiaji hayuko sudoers."
         )
     removed = await remove_sudo(user_id)
     if removed:
         await edit_or_reply(
             message,
-            text="Successfully removed user from sudoers, Bot will be restarted now.",
+            text="Imefanikiwa kuondolewa mtumiaji kutoka kwa sudoer, Bot itaanzishwa upya sasa.",
         )
         return await restart(None)
     await edit_or_reply(
-        message, text="Something wrong happened, check logs."
+        message, text="Kitu kibaya kilitokea, angalia logs."
     )
 
 
