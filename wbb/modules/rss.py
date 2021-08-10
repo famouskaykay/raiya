@@ -15,13 +15,13 @@ from wbb.utils.rss import Feed
 
 __MODULE__ = "RSS"
 __HELP__ = f"""
-/add_feed [URL] - Add a feed to chat
-/rm_feed - Remove feed from chat
+/add_feed [URL] - Ongeza kilishi kwenye soga
+/rm_feed - Toa kilishi kwenye soga
 
 **Note:** 
-    - This will check for updates every {RSS_DELAY//60} minutes.
-    - You can only add one feed per chat.
-    - Currently RSS and ATOM feeds are supported.
+    - Hii itakagua sasishi kila dakika {RSS_DELAY//60}.
+    - Unaweza tu kuongeza kilishi kimoja kwa kila soga.
+    - Kwa sasa vilishi vya RSS na ATOM vinategemezwa.
 """
 
 
@@ -84,7 +84,7 @@ async def add_feed_func(_, m: Message):
     chat_id = m.chat.id
     if await is_rss_active(chat_id):
         return await m.reply(
-            "[ERROR]: You already have an RSS feed enabled."
+            "[ERROR]: Tayari una kilishi cha RSS kilichowezeshwa."
         )
     try:
         await m.reply(feed.parsed(), disable_web_page_preview=True)
@@ -99,4 +99,4 @@ async def rm_feed_func(_, m: Message):
         await remove_rss_feed(m.chat.id)
         await m.reply("Removed RSS Feed")
     else:
-        await m.reply("There are no active RSS Feeds in this chat.")
+        await m.reply("Hakuna Vilishi vya RSS amilifu katika soga hii.")
