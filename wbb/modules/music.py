@@ -1,26 +1,3 @@
-"""
-MIT License
-
-Copyright (c) 2021 TheHamkerCat
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-"""
 from __future__ import unicode_literals
 
 import os
@@ -43,9 +20,9 @@ from wbb.utils.pastebin import paste
 
 __MODULE__ = "Music"
 __HELP__ = """
-/ytmusic [link] To Download Music From Various Websites Including Youtube. [SUDOERS]
-/saavn [query] To Download Music From Saavn.
-/lyrics [query] To Get Lyrics Of A Song.
+/ytmusic [link] kudownload nyimbo kwa Websites kama Youtube. [SUDOERS]
+/saavn [query] ku Download Music kwa Saavn.
+/lyrics [query] kupata Lyrics ya Song.
 """
 
 is_downloading = False
@@ -103,7 +80,7 @@ async def music(_, message):
     url = message.text.split(None, 1)[1]
     if is_downloading:
         return await message.reply_text(
-            "Another download is in progress, try again after sometime."
+            "jaribu tena im bussy"
         )
     is_downloading = True
     m = await message.reply_text(
@@ -115,7 +92,7 @@ async def music(_, message):
             None, partial(download_youtube_audio, url, message)
         )
         if not music:
-            await m.edit("Too Long, Can't Download.")
+            await m.edit("ni refu,siwezi Download.")
         (
             title,
             performer,
@@ -161,7 +138,7 @@ async def jssong(_, message):
         )
     if is_downloading:
         return await message.reply_text(
-            "Another download is in progress, try again after sometime."
+            "goja nimalizie morio ......"
         )
     is_downloading = True
     text = message.text.split(None, 1)[1]
