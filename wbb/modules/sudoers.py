@@ -41,14 +41,14 @@ from wbb.utils.functions import (extract_user,
 
 __MODULE__ = "Sudoers"
 __HELP__ = """
-/stats - To Check System Status.
-/gstats - To Check Bot's Global Stats.
-/gban - To Ban A User Globally.
-/clean_db - Clean database.
-/broadcast - To Broadcast A Message To All Groups.
-/update - To Update And Restart The Bot
-.anonymize - Change Name/PFP Randomly.
-.impersonate [User_ID|Username|Reply] - Clone profile of a user.
+/stats - kuangalia Status ya system.
+/gstats - Kuangalia Takwimu za Kimataifa za Bot.
+/gban - Kupiga marufuku mtumiaji duniani.
+/clean_db - kuosha database.
+/broadcast - Kutangaza ujumbe kwa vikundi vyote.
+/update - Kusasisha na kuanzisha upya Bot
+.anonymize - Badilisha Jina/PFP kwa nasibu.
+.impersonate [User_ID|Username|Reply] - Clone profile ya user.
 """
 
 # Stats Module
@@ -61,7 +61,7 @@ async def bot_sys_stats():
     disk = psutil.disk_usage("/").percent
     process = psutil.Process(os.getpid())
     stats = f"""
-{USERBOT_USERNAME}@William
+{USERBOT_USERNAME}@kaykayx
 ------------------
 UPTIME: {formatter.get_readable_time((bot_uptime))}
 BOT: {round(process.memory_info()[0] / 1024 ** 2)} MB
@@ -111,8 +111,8 @@ async def ban_globally(_, message):
     try:
         await app.send_message(
             user.id,
-            f"Hello, You have been globally banned by {from_user.mention},"
-            + " You can appeal for this ban by talking to him.",
+            f"sasa, Umepigwa marufuku kwote telegram na {from_user.mention},"
+            + " Unaweza kukata rufaa kwa marufuku hii kwa kuzungumza naye.",
         )
     except Exception:
         pass
@@ -137,7 +137,7 @@ __**New Global Ban**__
         )
     except Exception:
         await message.reply_text(
-            "User Gbanned, But This Gban Action Wasn't Logged, Add Me Bot In GBAN_LOG_GROUP"
+            "Mtumiaji Gbanned, Lakini Hatua hii ya Gban haikuingia, Niongeze Bot katika GBAN_LOG_GROUP"
         )
 
 
@@ -149,16 +149,16 @@ __**New Global Ban**__
 async def unban_globally(_, message):
     user_id = await extract_user(message)
     if not user_id:
-        return await message.reply_text("I can't find that user.")
+        return await message.reply_text("Siwezi kupata mtumiaji huyo.")
     user = await app.get_users(user_id)
 
     is_gbanned = await is_gbanned_user(user.id)
     if not is_gbanned:
-        await message.reply_text("I don't remember Gbanning him.")
+        await message.reply_text("Sikumbuki nikimGban.")
     else:
         await remove_gban_user(user.id)
         await message.reply_text(
-            f"Lifted {user.mention}'s Global Ban.'"
+            f"toa {user.mention}'s kwenye Global Ban.'"
         )
 
 
@@ -208,6 +208,6 @@ async def update_restart(_, message):
     except Exception as e:
         return await message.reply_text(str(e))
     m = await message.reply_text(
-        "**Updated with default branch, restarting now.**"
+        "**Imesasishwa na tawi chaguo-msingi, kuwasha upya sasa.**"
     )
     await restart(m)
