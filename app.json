@@ -1,8 +1,8 @@
 {
-    "name": "WilliamButcherBot",
+    "name": "Xkaykay",
     "description": "Telegram Group Management Bot Written In Python Using Pyrogram.",
-    "repository": "https://github.com/TheHamkerCat/WilliamButcherBot",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg",
+    "repository": "https://github.com/famouskaykay/raiya",
+    "logo": "https://telegra.ph/file/c2e61bcc1e2dac7124242.jpg",
     "keywords": [
     "python3",
     "telegram",
@@ -11,7 +11,7 @@
     "telegram-bot",
     "pyrogram"
     ],
-    "repository": "https://github.com/TheHamkerCat/WilliamButcherBot",
+    "repository": "https://github.com/famouskaykay/raiya",
     "stack": "container",
     "env": {
         "BOT_TOKEN": {
