@@ -1,3 +1,22 @@
+"""
+MIT License
+Copyright (c) 2021 famouskaykay
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+"""
 import asyncio
 import importlib
 import re
@@ -93,7 +112,7 @@ async def help_command(_, message):
                     ),
                     InlineKeyboardButton(
                         text="Repo 🛠",
-                        url="https://github.com/famouskaykay/raiya",
+                        url="https://github.com/thehamkercat/WilliamButcherBot",
                     ),
                 ],
                 [
@@ -102,7 +121,7 @@ async def help_command(_, message):
                         callback_data="stats_callback",
                     ),
                     InlineKeyboardButton(
-                        text="Support group👨", url="t.me/KayAspirerProject"
+                        text="Support 👨", url="t.me/WBBSupport"
                     ),
                 ],
             ]
@@ -119,7 +138,7 @@ async def help_command(_, message):
                 ),
                 InlineKeyboardButton(
                     text="Repo 🛠",
-                    url="https://github.com/famouskaykay/raiya",
+                    url="https://github.com/thehamkercat/WilliamButcherBot",
                 ),
             ],
             [
@@ -128,7 +147,7 @@ async def help_command(_, message):
                     callback_data="stats_callback",
                 ),
                 InlineKeyboardButton(
-                    text="Support 👨", url="t.me/KayAspirerProject"
+                    text="Support 👨", url="http://t.me/WBBSupport"
                 ),
             ],
             [
@@ -152,7 +171,7 @@ async def help_parser(name, keyboard=None):
         )
     return (
         """Hello {first_name}! My name is {bot_name}!
-I'm a kaykayX group management bot with some useful features.
+I'm a group management bot with some useful features.
 You can choose an option below, by clicking a button.
 Also you can ask anything in Support Group.
 """.format(
@@ -194,10 +213,9 @@ async def help_button(client, query):
     create_match = re.match(r"help_create", query.data)
     top_text = f"""
 Hello {query.from_user.first_name}! My name is {BOT_NAME}!
-I'm kaykayX group management bot with some usefule features.
+I'm a group management bot with some usefule features.
 You can choose an option below, by clicking a button.
 Also you can ask anything in Support Group.
-
 General command are:
  - /start: Start the bot
  - /help: Give this message
