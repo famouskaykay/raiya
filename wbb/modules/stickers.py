@@ -1,26 +1,3 @@
-"""
-MIT License
-
-Copyright (c) 2021 TheHamkerCat
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-"""
 import imghdr
 import os
 from traceback import format_exc
@@ -41,8 +18,8 @@ from wbb.utils.stickerset import (add_sticker_to_set, create_sticker,
                                   get_sticker_set_by_name)
 
 __MODULE__ = "Stickers"
-__HELP__ = """/sticker_id - To Get File ID of A Sticker.
-/kang - To Kang A Sticker or Image."""
+__HELP__ = """/sticker_id -kupata File ID ya Sticker.
+/kang - ku Kang  Sticker ama picha."""
 
 MAX_STICKERS = 120  # would be better if we could fetch this limit directly from telegram
 SUPPORTED_TYPES = ["jpeg", "png", "webp"]
@@ -52,9 +29,9 @@ SUPPORTED_TYPES = ["jpeg", "png", "webp"]
 @capture_err
 async def sticker_id(_, message):
     if not message.reply_to_message:
-        return await message.reply_text("Reply to a sticker.")
+        return await message.reply_text("tagi sticker.")
     if not message.reply_to_message.sticker:
-        return await message.reply_text("Reply to a sticker.")
+        return await message.reply_text("tagi sticker.")
     file_id = message.reply_to_message.sticker.file_id
     await message.reply_text(f"`{file_id}`")
 
@@ -64,11 +41,11 @@ async def sticker_id(_, message):
 async def kang(client, message):
     if not message.reply_to_message:
         return await message.reply_text(
-            "Reply to a sticker/image to kang it."
+            "tag kwa sticker/pichae ili u kang."
         )
     if not message.from_user:
         return await message.reply_text(
-            "You are anon admin, kang stickers in my pm."
+            "Wewe ni mtawala wa anon, kang stika katika pm yangu."
         )
     msg = await message.reply_text("Kanging Sticker..")
 
@@ -109,9 +86,9 @@ async def kang(client, message):
                     temp_file_path
                 )
             except OSError as e:
-                await msg.edit_text("Something wrong happened.")
+                await msg.edit_text("imekataa sijui mbona.")
                 raise Exception(
-                    f"Something went wrong while resizing the sticker (at {temp_file_path}); {e}"
+                    f"imekataa kuresize sticker  (at {temp_file_path}); {e}"
                 )
                 return False
             sticker = await create_sticker(
@@ -195,14 +172,14 @@ async def kang(client, message):
             ]
         )
         await msg.edit(
-            "You Need To Start A Private Chat With Me.",
+            "Unahitaji kuanza mazungumzo ya faragha na mimi.",
             reply_markup=keyboard,
         )
     except StickerPngNopng:
         await message.reply_text(
-            "Stickers must be png files but the provided image was not a png"
+            "stickers lazima ziwe faili za png lakini picha iliyotolewa haikuwa png"
         )
     except StickerPngDimensions:
         await message.reply_text(
-            "The sticker png dimensions are invalid."
+            "Vipimo vya sticker ni mbaya"
         )
