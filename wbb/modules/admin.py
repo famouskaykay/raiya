@@ -1,26 +1,3 @@
-"""
-MIT License
-
-Copyright (c) 2021 TheHamkerCat
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-"""
 import asyncio
 
 from pyrogram import filters
@@ -36,27 +13,27 @@ from wbb.utils.functions import (extract_user,
                                  time_converter)
 
 __MODULE__ = "Admin"
-__HELP__ = """/ban - Ban A User
-/dban - Delete the replied message banning its sender
-/tban - Ban A User For Specific Time
-/unban - Unban A User
-/warn - Warn A User
-/dwarn - Delete the replied message warning its sender
-/rmwarn - Remove 1 Warning Of A User
-/rmwarns - Remove All Warning of A User
-/warns - Show Warning Of A User
-/kick - Kick A User
-/dkick - Delete the replied message kicking its sender
-/purge - Purge Messages
-/del - Delete Replied Message
-/promote - Promote A Member
-/demote - Demote A Member
-/pin - Pin A Message
-/mute - Mute A User
-/tmute - Mute A User For Specific Time
+__HELP__ = """/ban - Kupiga marufuku mtumiaji
+/dban - Futa ujumbe uliojibu kupiga marufuku mtumaji wake
+/tban - Piga marufuku mtumiaji kwa muda maalum
+/unban - Ondoa Mtumiaji
+/warn - Onyo mtumiaji
+/dwarn - Futa tahadhari ya ujumbe uliojibuwa
+/rmwarn - Ondoa onyo 1 la mtumiaji
+/rmwarns - Ondoa onyo zotte za mtumiajir
+/warns - Onyesha Tahadhari ya Mtumiaji
+/kick - piga mtumiaji
+/dkick - Futa ujumbe uliojibu uteketeze mtumaji wake
+/purge - Tapisha Ujumbe
+/del - Futa Ujumbe Uliojibu
+/promote - Kukuza Mwanachama
+/demote - Msambaratishe Mwanachama
+/pin - Bana Ujumbe
+/mute - Nyamazisha Mtumiaji
+/tmute - Nyamazisha mtumiaji kwa muda maalum
 /unmute - Unmute A User
-/ban_ghosts - Ban Deleted Accounts
-/report | @admins - Report A Message To Admins."""
+/ban_ghosts - Kupiga marufuku Akaunti Zilizofutwa
+/report | @admins - Ripoti Ujumbe kwa Watawala."""
 
 
 async def member_permissions(chat_id: int, user_id: int):
@@ -183,14 +160,14 @@ async def purgeFunc(client, message: Message):
 async def kickFunc(_, message: Message):
     user_id, reason = await extract_user_and_reason(message)
     if not user_id:
-        return await message.reply_text("I can't find that user.")
+        return await message.reply_text("simpati")
     if user_id == BOT_ID:
         return await message.reply_text(
-            "I can't kick myself, i can leave if you want."
+            "siwezi jitoa morio ntakuacha."
         )
     if user_id in SUDOERS:
         return await message.reply_text(
-            "You Wanna Kick The Elevated One?"
+            "Unataka kuteketeza Aliyeinuliwa?"
         )
     if user_id in (await list_admins(message.chat.id)):
         return await message.reply_text(
@@ -221,14 +198,14 @@ async def kickFunc(_, message: Message):
 async def banFunc(_, message: Message):
     user_id, reason = await extract_user_and_reason(message)
     if not user_id:
-        return await message.reply_text("I can't find that user.")
+        return await message.reply_text("simpati.")
     if user_id == BOT_ID:
         return await message.reply_text(
-            "I can't ban myself, i can leave if you want."
+            "siwezi jiban morio ntakuburn."
         )
     if user_id in SUDOERS:
         return await message.reply_text(
-            "You Wanna Ban The Elevated One?, RECONSIDER!"
+            "Unataka kuteketeza Aliyeinuliwa??, RECONSIDER!"
         )
     if user_id in (await list_admins(message.chat.id)):
         return await message.reply_text(
