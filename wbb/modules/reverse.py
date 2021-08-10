@@ -18,7 +18,7 @@ from wbb.utils.functions import get_file_id_from_message
 async def reverse_image_search(_, message):
     if not message.reply_to_message:
         return await message.reply_text(
-            "Reply to a message to reverse search it."
+            "tag message ili ureverse search ."
         )
     reply = message.reply_to_message
     if (
@@ -29,7 +29,7 @@ async def reverse_image_search(_, message):
         and not reply.video
     ):
         return await message.reply_text(
-            "Reply to an image/document/sticker/animation to reverse search it."
+            "tag picha/document/sticker/animation ili ureverse search ."
         )
     m = await message.reply_text("Downloading")
     file_id = await get_file_id_from_message(reply)
@@ -71,7 +71,7 @@ async def reverse_image_search(_, message):
     anchor_element = div.find("a")
     text = anchor_element.text
     try:
-        await m.edit("Trying to send a photo")
+        await m.edit("jaribu kutuma picha")
         await app.send_photo(
             message.chat.id,
             photo=f"https://webshot.amanoteam.com/print?q={location}",
