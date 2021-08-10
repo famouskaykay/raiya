@@ -1,26 +1,3 @@
-"""
-MIT License
-
-Copyright (c) 2021 TheHamkerCat
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-"""
 from io import BytesIO
 from traceback import format_exc
 
@@ -32,11 +9,10 @@ from wbb.core.decorators.errors import capture_err
 
 __MODULE__ = "Quotly"
 __HELP__ = """
-/q - To quote a message.
-/q [INTEGER] - To quote more than 1 messages.
-/q r - to quote a message with it's reply
-
-Use .q to quote using userbot
+/q - ku quote message.
+/q [INTEGER] - ku quote messag zaidi ya 1.
+/q r - ku quote message na matokeo
+Use .q ku quote ukitumia userbot
 """
 
 
@@ -73,11 +49,11 @@ def isArgInt(message: Message) -> bool:
 async def quotly_func(client, message: Message):
     if not message.reply_to_message:
         return await message.reply_text(
-            "Reply to a message to quote it."
+            "Reply kwa message ili ni quote."
         )
     if not message.reply_to_message.text:
         return await message.reply_text(
-            "Replied message has no text, can't quote it."
+            "message haina text, siwezi quote."
         )
     m = await message.reply_text("Quoting Messages")
     if len(message.command) < 2:
@@ -87,7 +63,7 @@ async def quotly_func(client, message: Message):
         arg = isArgInt(message)
         if arg[0]:
             if arg[1] < 2 or arg[1] > 10:
-                return await m.edit("Argument must be between 2-10.")
+                return await m.edit("Argument lazima iwe 2-10.")
             count = arg[1]
             messages = await client.get_messages(
                 message.chat.id,
@@ -113,7 +89,7 @@ async def quotly_func(client, message: Message):
             messages = [reply_message]
     else:
         await m.edit(
-            "Incorrect argument, check quotly module in help section."
+            " argument mbaya, angalia quotly Moduli kwa help section."
         )
         return
     try:
@@ -127,9 +103,9 @@ async def quotly_func(client, message: Message):
         sticker.close()
     except Exception as e:
         await m.edit(
-            "Something wrong happened while quoting messages,"
-            + " This error usually happens when there's a "
-            + " message containing something other than text."
+            "Kitu kibaya kilitokea wakati wa kunukuu ujumbe,"
+            + " Tkosa lake kwa kawaida hutokea wakati kuna "
+            + " ujumbe ulio na kitu kingine zaidi ya matini."
         )
         e = format_exc()
         print(e)
