@@ -1,3 +1,4 @@
+# flake8: noqa F405
 """
 MIT License
 Copyright (c) 2021 famouskaykay
@@ -165,4 +166,4 @@ print("[INFO]: LOADED UB/BOT PROFILE INFO")
 if USERBOT_ID not in SUDOERS:
     SUDOERS.append(USERBOT_ID)
 app.stop()
-app2.stop() F401
+app2.stop()
