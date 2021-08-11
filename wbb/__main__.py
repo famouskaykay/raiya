@@ -112,7 +112,7 @@ async def help_command(_, message):
                     ),
                     InlineKeyboardButton(
                         text="Repo 🛠",
-                        url="https://github.com/thehamkercat/WilliamButcherBot",
+                        url="https://github.com/famouskaykay/raiya",
                     ),
                 ],
                 [
@@ -121,7 +121,7 @@ async def help_command(_, message):
                         callback_data="stats_callback",
                     ),
                     InlineKeyboardButton(
-                        text="Support 👨", url="t.me/WBBSupport"
+                        text="Support 👨", url="t.me/KayAspirerProject"
                     ),
                 ],
             ]
@@ -138,7 +138,7 @@ async def help_command(_, message):
                 ),
                 InlineKeyboardButton(
                     text="Repo 🛠",
-                    url="https://github.com/thehamkercat/WilliamButcherBot",
+                    url="https://github.com/famouskaykay/raiya",
                 ),
             ],
             [
@@ -147,7 +147,7 @@ async def help_command(_, message):
                     callback_data="stats_callback",
                 ),
                 InlineKeyboardButton(
-                    text="Support 👨", url="http://t.me/WBBSupport"
+                    text="Support 👨", url="https://t.me/KayAspirerProject"
                 ),
             ],
             [
@@ -159,7 +159,7 @@ async def help_command(_, message):
         ]
     )
     await message.reply(
-        f"Hey there! My name is {BOT_NAME}. I can manage your group with lots of useful features, feel free to add me to your group.",
+        f"Hey there! My name is {BOT_NAME}. I can manage your group with lots of useful features, feel free to add me to your group. powered by Xkaykay",
         reply_markup=keyboard,
     )
 
@@ -173,7 +173,7 @@ async def help_parser(name, keyboard=None):
         """Hello {first_name}! My name is {bot_name}!
 I'm a group management bot with some useful features.
 You can choose an option below, by clicking a button.
-Also you can ask anything in Support Group.
+Also you can ask anything in Support Group @KayAspirerProject.
 """.format(
             first_name=name,
             bot_name=BOT_NAME,
@@ -217,7 +217,7 @@ I'm a group management bot with some usefule features.
 You can choose an option below, by clicking a button.
 Also you can ask anything in Support Group.
 General command are:
- - /start: Start the bot
+ - /start: anzisha bot
  - /help: Give this message
  """
     if mod_match:
