@@ -109,25 +109,12 @@ async def help_command(_, message):
                     InlineKeyboardButton(
                         text="Help ❓",
                         url=f"t.me/{BOT_USERNAME}?start=help",
-                    ),
-                    InlineKeyboardButton(
-                        text="Repo 🛠",
-                        url="https://github.com/famouskaykay/raiya",
-                    ),
-                ],
-                [
-                    InlineKeyboardButton(
-                        text="System Stats 💻",
-                        callback_data="stats_callback",
-                    ),
-                    InlineKeyboardButton(
-                        text="Support 👨", url="t.me/KayAspirerProject"
-                    ),
+                    )
                 ],
             ]
         )
         await message.reply(
-            "**Hey there! My name is {BOT_NAME}. I can manage your group with lots of useful features  contact me in pm for more details**", reply_markup=keyboard
+            "**Niaje morio! I can manage your group with lots of useful features  contact me in pm for more details**", reply_markup=keyboard
         )
         return
     keyboard = InlineKeyboardMarkup(
