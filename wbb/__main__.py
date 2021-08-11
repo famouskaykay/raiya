@@ -127,7 +127,7 @@ async def help_command(_, message):
             ]
         )
         await message.reply(
-            "Pm Me For More Details.", reply_markup=keyboard
+            "**Hey there! My name is {BOT_NAME}. I can manage your group with lots of useful features  contact me in pm for more details**", reply_markup=keyboard
         )
         return
     keyboard = InlineKeyboardMarkup(
