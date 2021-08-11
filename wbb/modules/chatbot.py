@@ -27,7 +27,7 @@ async def chat_bot_toggle(db, message: Message):
             text = "Chatbot Enabled!"
             return await edit_or_reply(message, text=text)
         await edit_or_reply(
-            message, text="ChatBot iko Enabled."
+            message, text="ChatBot Is Already Enabled."
         )
     elif status == "disable":
         if chat_id in db:
@@ -57,9 +57,10 @@ async def chatbot_status(_, message: Message):
     await chat_bot_toggle(active_chats_bot, message)
 
 
-async def kaykayxQuery(query: str, user_id: int):
-    kaykayx = await arq.kaykayx(query, user_id)
-    return kaykayx.result
+async def lunaQuery(query: str, user_id: int):
+    luna = await arq.luna(query, user_id)
+    return luna.result
+  
 
 
 async def type_and_send(message: Message):
@@ -67,8 +68,23 @@ async def type_and_send(message: Message):
     user_id = message.from_user.id if message.from_user else 0
     query = message.text.strip()
     await message._client.send_chat_action(chat_id, "typing")
-    response, _ = await gather(kaykayxQuery(query, user_id), sleep(3))
+    response, _ = await gather(lunaQuery(query, user_id), sleep(1))
     await message.reply_text(response)
+    await message._client.send_chat_action(chat_id, "cancel")
+    
+    if "Luna" in response:
+        responsee = response.replace("Luna", "kaykayx")
+    else:
+        responsee = response
+    if "Aco" in responsee:
+        responsess = responsee.replace("Aco", "kaykayx")
+    else:
+        responsess = responsee
+    if "Who is Tiana?" in responsess:
+        responsess2 = responsess.replace("Who is kaykayx?", "telegram bot manager")
+    else:
+        responsess2 = responsess
+    await message.reply_text(responsess2)
     await message._client.send_chat_action(chat_id, "cancel")
 
 
