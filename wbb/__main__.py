@@ -147,10 +147,8 @@ async def help_command(_, message):
     )
     await message.reply_photo(
         "https://telegra.ph/file/aaca50572f08c0a24f6a3.jpg",
-        caption="Hi {first_name}😍, I'm **kaykayX** group management robot,"
-        + " Choose An Option From Below.",.format(
-          first_name=name,
-        ),
+        caption="Hi there😍, I'm **kaykayX** group management robot,"
+        + " Choose An Option From Below.",
         reply_markup=keyboard,
     )
 
