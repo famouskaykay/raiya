@@ -94,7 +94,7 @@ async def start_bot():
         except Exception:
             pass
     else:
-        await app.send_message(LOG_GROUP_ID, "Bot started!")
+        await app.send_message(LOG_GROUP_ID, "**xkaykay** has started🖤!")
     await idle()
     print("[INFO]: STOPPING BOT AND CLOSING AIOHTTP SESSION")
     await aiohttpsession.close()
@@ -114,7 +114,7 @@ async def help_command(_, message):
             ]
         )
         await message.reply(
-            "**Niaje morio! I can manage your group with lots of useful features  contact me in pm for more details**", reply_markup=keyboard
+            "**hey**{first_name}! **I can manage your group with lots of useful features  contact me in pm for more help**", reply_markup=keyboard
         )
         return
     keyboard = InlineKeyboardMarkup(
@@ -141,12 +141,19 @@ async def help_command(_, message):
                 InlineKeyboardButton(
                     text="Add Me To Your Group 🎉",
                     url=f"http://t.me/{BOT_USERNAME}?startgroup=new",
+                ),
+            ],
+            [
+                InlineKeyboardButton(
+                    text="bot developer 🎉", url="http://t.me/famouskaykay3",
                 )
             ],
         ]
     )
-    await message.reply(
-        f"Hey there! My name is {BOT_NAME}. I can manage your group with lots of useful features, feel free to add me to your group. powered by Xkaykay",
+    await message.reply_photo(
+        "https://telegra.ph/file/aaca50572f08c0a24f6a3.jpg",
+        caption=f"Hi {mention}, I'm kaykayX group management robot,"
+        + " Choose An Option From Below.",
         reply_markup=keyboard,
     )
 
@@ -160,7 +167,7 @@ async def help_parser(name, keyboard=None):
         """Hello {first_name}! My name is {bot_name}!
 I'm a group management bot with some useful features.
 You can choose an option below, by clicking a button.
-Also you can ask anything in Support Group @KayAspirerProject.
+Also you can ask anything in Support Group.
 """.format(
             first_name=name,
             bot_name=BOT_NAME,
