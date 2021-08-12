@@ -16,7 +16,7 @@ __HELP__ = (
 @capture_err
 async def repo(_, message):
     users = await get(
-        "https://api.github.com/repos/famouskaykay/raiya"
+        "https://api.github.com/repos/famouskaykay/raiya/contributors"
     )
     list_of_users = ""
     count = 1
