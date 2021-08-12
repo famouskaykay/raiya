@@ -11,6 +11,13 @@
     <a href="https://GitHub.com/famouskaykay"> <img src="http://ForTheBadge.com/images/badges/built-with-love.svg" alt="built-with-love"></a>
 </p>
 
+<p align="center">
+    <img src="https://img.shields.io/github/license/famouskaykay/raiya?style=for-the-badge&logo=appveyor" alt="LICENSE">
+    <img src="https://img.shields.io/github/contributors/famouskaykay/raiya?style=for-the-badge&logo=appveyor" alt="Contributors">
+    <img src="https://img.shields.io/github/repo-size/famouskkaykay/raiya?style=for-the-badge&logo=appveyor" alt="Repository Size">
+</p>
+
+
 <h3 align="center"> 
     Ready to use method
 </h3>
