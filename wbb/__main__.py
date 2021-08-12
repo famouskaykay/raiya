@@ -114,7 +114,7 @@ async def help_command(_, message):
             ]
         )
         await message.reply(
-            "**hey** {first_name} ! **I can manage your group with lots of useful features  contact me in pm for more help**", reply_markup=keyboard
+            "**hey there😁❤️ I can manage your group with lots of useful features🍆, contact me in pm for more help**", reply_markup=keyboard
         )
         return
     keyboard = InlineKeyboardMarkup(
@@ -134,7 +134,7 @@ async def help_command(_, message):
                     callback_data="stats_callback",
                 ),
                 InlineKeyboardButton(
-                    text="Support 👨", url="https://t.me/KayAspirerProject"
+                    text="Support🖤👨", url="https://t.me/KayAspirerProject"
                 ),
             ],
             [
@@ -147,8 +147,10 @@ async def help_command(_, message):
     )
     await message.reply_photo(
         "https://telegra.ph/file/aaca50572f08c0a24f6a3.jpg",
-        caption=f"Hi {mention}, I'm kaykayX group management robot,"
-        + " Choose An Option From Below.",
+        caption="Hi {first_name}😍, I'm **kaykayX** group management robot,"
+        + " Choose An Option From Below.",.format(
+          first_name=name,
+        ),
         reply_markup=keyboard,
     )
 
