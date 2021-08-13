@@ -93,6 +93,27 @@ async def type_and_send(message: Message):
     & ~filters.forwarded,
     group=chatbot_group,
 )
+
+@app.on_message(filters.text("kaykay") & ~filters.edited)
+async def kaykay(client, message):
+ 
+   if message.chat.type == 'private':
+       await message.reply_sticker(random.choice(STICKERS))
+      STICKERS = (
+        "CAACAgEAAxkDAAEE5zBgzpDoaKGN_MxWotYtWkpb1ifgMgACXAADni6oMXCx-PB6sonJHgQ",
+        "CAACAgEAAxkDAAEE5zFgzpFDFp_0V9vi-r5ZnKaOUDCVkAACVQADni6oMROiUdEEyPN8HgQ",
+        "CAACAgEAAxkDAAEE5zJgzpFxlslQcP9Xdjsvqb2oqkZrxQACeAADni6oMQhcS_oH6wPjHgQ",
+        "CAACAgEAAxkDAAEE5zNgzpGbRbc_ecGW1qIk2qojT0yTmgACdwADni6oMd2k3jP94wO6HgQ",
+        "CAACAgEAAxkDAAEE5zZgzpG9wHOrBm-X_gNGWlUSGXkEMQACWAADni6oMe7FeddXzDLoHgQ",
+        "CAACAgUAAx0CRI6ivgAC1qVg2iEgaRvIKr9auH4VGEalNK8UGAACAQMAAvEAAdBWNmr7bsO-rvseBA",
+        "CAACAgUAAx0CRI6ivgAC1rFg2iIT1mcmXTV1TZvM2WaA0tmKuAACRAMAAmpP0Fb1Txeqb6b0AR4E",
+        "CAACAgUAAx0CRI6ivgAC1rpg2iJ0UnLFLvWLw86DTatSLyKnvgAChwMAAlf90VYju1kc0R0pdB4E",
+        "CAACAgUAAx0CRI6ivgAC1sJg2iLnlFEKWs07Jw-ws784R01FTwACrQIAAlhx0FaXbV8XMcrAWx4E",
+        "CAACAgUAAx0CRI6ivgAC1sxg2iNwFjooHU0PjKL48FdVRw_NIwACyAMAAoyf0FaMuLOiawABEEceBA",
+        "CAACAgUAAx0CRI6ivgAC1tRg2iPn9I5BtWpa_dL0kq7b4qvd-AAC-QIAArxX0VbSgHcf_OyMMB4E",
+    )
+      
+                                  
 @capture_err
 async def chatbot_talk(_, message: Message):
     if message.chat.id not in active_chats_bot:
