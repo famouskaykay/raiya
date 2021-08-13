@@ -96,19 +96,7 @@ async def type_and_send(message: Message):
     & ~filters.forwarded,
     group=chatbot_group,
 )
-
-@app.on_message(
-    filters.regex("Xkaykay|kaykay|Kaykay|kaykayx|xkaykay")
-    & ~filters.bot
-    & ~filters.via_bot
-    & ~filters.forwarded
-    & ~filters.reply
-    & ~filters.channel
-    & ~filters.edited
-)
-)
-     
-                                  
+                                
 @capture_err
 async def chatbot_talk(_, message: Message):
     if message.chat.id not in active_chats_bot:
