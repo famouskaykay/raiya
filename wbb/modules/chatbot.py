@@ -96,7 +96,7 @@ async def type_and_send(message: Message):
     group=chatbot_group,
 )
 
-@daisyx.on_message(
+@app.on_message(
     filters.regex("Xkaykay|kaykay|Kaykay|kaykayx|xkaykay")
     & ~filters.bot
     & ~filters.via_bot
