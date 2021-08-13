@@ -73,15 +73,15 @@ async def type_and_send(message: Message):
     await message._client.send_chat_action(chat_id, "typing")
     response, _ = await gather(lunaQuery(query, user_id), sleep(1))
     if "Luna" in response:
-        responsee = response.replace("Luna", "kaykayx")
+        responsee = response.replace("Luna", "kaykay")
     else:
         responsee = response
     if "Aco" in responsee:
-        responsess = responsee.replace("Aco", "kaykayx")
+        responsess = responsee.replace("Aco", "kaykay")
     else:
         responsess = responsee
     if "Who is Tiana?" in responsess:
-        responsess2 = responsess.replace("Who is kaykayx?", "telegram bot manager")
+        responsess2 = responsess.replace("Who is kaykay?", "telegram bot manager")
     else:
         responsess2 = responsess
     await message.reply_text(responsess2)
@@ -108,13 +108,6 @@ async def chatbot_talk(_, message: Message):
     if message.reply_to_message.from_user.id != BOT_ID:
         return
     await type_and_send(message)
-    if not "en" in lan and not lan == "":
-        try:
-            test = translator.translate(test, dest="en")
-            test = test.text
-        except:
-            return
-
 
 """ FOR USERBOT """
 
