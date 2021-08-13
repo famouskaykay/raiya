@@ -107,50 +107,7 @@ async def type_and_send(message: Message):
     & ~filters.edited
 )
 )
-    try:
-        lan = translator.detect()
-        lan = lan.lang
-    except:
-   
-    if not "en" in lan and not lan == "":
-        try:
-            test = translator.translate(test, dest="en")
-            test = test.text
-        except:
-            return
-
-    # test = emoji.demojize(test.strip())
-
-    test = test.replace("xkaykay", "Luna")
-    test = test.replace("XKAYKAY", "Luna")
-    response = await lunaQuery(test, message.from_user.id if message.from_user else 0)
-    response = response.replace("Luna", "Xkaykay")
-    response = response.replace("luna", "Xkaykay")
-
-    pro = response
-    if not "en" in lan and not lan == "":
-        try:
-            pro = translator.translate(pro, dest=lan)
-            pro = pro.text
-        except Exception:
-            return
-    try:
-        await app.send_chat_action(message.chat.id, "typing")
-        await message.reply_text(pro)
-    except CFError:
-        return
-
-
-__help__ = """
-<b> Chatbot </b>
-XKAYKAY AI 1.01 Advanced group management
- - /chatbot [ENABLE/DISABLE]: Enables and disables AI Chat mode (EXCLUSIVE)
- 
-"""
-
-__mod_name__ = "AI Assistant"
-
-      
+     
                                   
 @capture_err
 async def chatbot_talk(_, message: Message):
@@ -163,6 +120,12 @@ async def chatbot_talk(_, message: Message):
     if message.reply_to_message.from_user.id != BOT_ID:
         return
     await type_and_send(message)
+    if not "en" in lan and not lan == "":
+        try:
+            test = translator.translate(test, dest="en")
+            test = test.text
+        except:
+            return
 
 
 """ FOR USERBOT """
