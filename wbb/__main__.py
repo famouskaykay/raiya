@@ -132,17 +132,16 @@ async def help_command(_, message):
                 InlineKeyboardButton(
                     text="Support🖤👨", url="https://t.me/KayAspirerProject"
                 ),
-              [
-                InlineKeyboardButton(
-                    text="fun ❓", callback_data="bot_commands"
-                ),
-            ],
             ],
             [
                 InlineKeyboardButton(
                     text="plugins 🎉",
                     url=f"https://t.me/xprograming/7",
-                )
+                ),
+              
+                InlineKeyboardButton(
+                    text="fun ❓", callback_data="bot_commands"
+                ),
             ],
             [
                 InlineKeyboardButton(
