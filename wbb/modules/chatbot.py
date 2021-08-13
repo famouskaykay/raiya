@@ -9,6 +9,8 @@ from wbb.core.decorators.errors import capture_err
 from wbb.modules.userbot import edit_or_reply
 from wbb.utils.filter_groups import chatbot_group
 
+translator = google_translator()
+
 __MODULE__ = "ChatBot"
 __HELP__ = """
 /chatbot [ENABLE|DISABLE] To Enable Or Disable ChatBot In Your Chat.
