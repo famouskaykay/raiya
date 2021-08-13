@@ -2,6 +2,7 @@ from asyncio import gather, sleep
 
 from pyrogram import filters
 from pyrogram.types import Message
+from googletrans import Translator as google_translator
 
 from wbb import (BOT_ID, SUDOERS, USERBOT_ID, USERBOT_PREFIX,
                  USERBOT_USERNAME, app, app2, arq)
