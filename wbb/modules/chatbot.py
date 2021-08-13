@@ -56,6 +56,19 @@ async def chat_bot_toggle(db, message: Message):
 
 
 # Enabled | Disable Chatbot
+async def fetch(url):
+    try:
+        async with aiohttp.Timeout(10.0):
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url) as resp:
+                    try:
+                        data = await resp.json()
+                    except:
+                        data = await resp.text()
+            return data
+    except:
+        print("AI response Timeout")
+        return
 
 
 @app.on_message(filters.command("chatbot") & ~filters.edited)
