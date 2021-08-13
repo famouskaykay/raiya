@@ -123,14 +123,10 @@ async def help_command(_, message):
                 InlineKeyboardButton(
                     text="Commands ❓", callback_data="bot_commands"
                 ),
-                InlineKeyboardButton(
-                    text="Repo 🛠",
-                    url="https://github.com/famouskaykay/raiya",
-                ),
             ],
             [
                 InlineKeyboardButton(
-                    text="System Stats 🖥",
+                    text="System Stats 🛡",
                     callback_data="stats_callback",
                 ),
                 InlineKeyboardButton(
@@ -205,14 +201,12 @@ async def help_button(client, query):
     next_match = re.match(r"help_next\((.+?)\)", query.data)
     back_match = re.match(r"help_back", query.data)
     create_match = re.match(r"help_create", query.data)
-    top_text = f"""
-Hello {query.from_user.first_name}! My name is {BOT_NAME}!
-I'm a group management bot with some usefule features.
+    top_text ="""
 ═════════════════════════════
-powered By **Xkaykay**
+  powered By **Xkaykay**
 ═════════════════════════════
-You can choose an option below, by clicking a button.
-Also you can ask anything in Support Group.
+  **Available commands**.
+  
 General command are:
  - /start: start bot
  - /help: Give this message
