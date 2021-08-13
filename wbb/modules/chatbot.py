@@ -1,3 +1,11 @@
+import re
+
+import emoji
+
+url = "https://acobot-brainshop-ai-v1.p.rapidapi.com/get"
+import re
+
+import aiohttp
 from asyncio import gather, sleep
 
 from pyrogram import filters
