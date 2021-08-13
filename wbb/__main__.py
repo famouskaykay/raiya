@@ -139,6 +139,12 @@ async def help_command(_, message):
             ],
             [
                 InlineKeyboardButton(
+                    text="plugins 🎉",
+                    url=f"https://t.me/xprograming/7",
+                )
+            ],
+            [
+                InlineKeyboardButton(
                     text="Add Me To Your Group 🎉",
                     url=f"http://t.me/{BOT_USERNAME}?startgroup=new",
                 )
