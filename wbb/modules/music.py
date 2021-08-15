@@ -1,28 +1,8 @@
-from __future__ import unicode_literals
-
-import os
-from asyncio import get_running_loop
-from functools import partial
-from io import BytesIO
-from random import randint
-from urllib.parse import urlparse
-
-import aiofiles
-import aiohttp
-import ffmpeg
-import youtube_dl
-from pyrogram import filters
-
-from wbb import aiohttpsession as session
-from wbb import app, arq
-from wbb.core.decorators.errors import capture_err
-from wbb.utils.pastebin import paste
-
 __MODULE__ = "Music"
 __HELP__ = """
-/ytmusic [link] kudownload nyimbo kwa Websites kama Youtube. [SUDOERS]
-/saavn [query] ku Download Music kwa Saavn.
-/lyrics [query] kupata Lyrics ya Song.
+/ytmusic [link] To Download Music From Various Websites Including Youtube. [SUDOERS]
+/saavn [query] To Download Music From Saavn.
+/lyrics [query] To Get Lyrics Of A Song.
 """
 
 is_downloading = False
@@ -80,7 +60,7 @@ async def music(_, message):
     url = message.text.split(None, 1)[1]
     if is_downloading:
         return await message.reply_text(
-            "jaribu tena im bussy"
+            "Another download is in progress, try again after sometime."
         )
     is_downloading = True
     m = await message.reply_text(
@@ -92,7 +72,7 @@ async def music(_, message):
             None, partial(download_youtube_audio, url, message)
         )
         if not music:
-            await m.edit("ni refu,siwezi Download.")
+            await m.edit("Too Long, Can't Download.")
         (
             title,
             performer,
@@ -138,7 +118,7 @@ async def jssong(_, message):
         )
     if is_downloading:
         return await message.reply_text(
-            "goja nimalizie morio ......"
+            "Another download is in progress, try again after sometime."
         )
     is_downloading = True
     text = message.text.split(None, 1)[1]
