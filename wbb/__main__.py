@@ -135,15 +135,15 @@ async def help_command(_, message):
                 ],
             ]
         )
-          await message.reply_photo(
-        "https://telegra.ph/file/aaca50572f08c0a24f6a3.jpg",
-        caption="Hi there😍, I'm **kaykayX** group management robot,"
-        + " Choose An Option From Below.",
+          return await message.reply(
+            "Hi there😍, .", reply_markup=keyboard
         )
-    await message.reply(
-        reply_markup=home_keyboard_pm,
+    await message.reply_photo(
+        "https://telegra.ph/file/aaca50572f08c0a24f6a3.jpg",
+        caption="I'm **kaykayX** group management robot,"
+        + " Choose An Option From Below.",
+        reply_markup=keyboard,
     )
-
 
 
 async def help_parser(name, keyboard=None):
