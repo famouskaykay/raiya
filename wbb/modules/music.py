@@ -1,3 +1,20 @@
+from __future__ import unicode_literals
+
+import os
+from asyncio import get_running_loop
+from functools import partial
+from io import BytesIO
+from urllib.parse import urlparse
+
+import ffmpeg
+import youtube_dl
+from pyrogram import filters
+
+from wbb import aiohttpsession as session
+from wbb import app, arq
+from wbb.core.decorators.errors import capture_err
+from wbb.utils.pastebin import paste
+
 __MODULE__ = "Music"
 __HELP__ = """
 /ytmusic [link] To Download Music From Various Websites Including Youtube. [SUDOERS]
