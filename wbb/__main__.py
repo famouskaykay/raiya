@@ -139,13 +139,9 @@ async def help_command(_, message):
         "https://telegra.ph/file/aaca50572f08c0a24f6a3.jpg",
         caption="Hi there😍, I'm **kaykayX** group management robot,"
         + " Choose An Option From Below.",
-        reply_markup=keyboard,
-    )
-    await message.reply(
         home_text_pm,
         reply_markup=home_keyboard_pm,
     )
-
 
 async def help_parser(name, keyboard=None):
     if not keyboard:
