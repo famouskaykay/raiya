@@ -123,6 +123,10 @@ async def help_command(_, message):
                         text="Help ❓",
                         url=f"t.me/{BOT_USERNAME}?start=help",
                     ),
+                    InlineKeyboardButton(
+                        text="Repo 🛠",
+                        url="t.me/KayAspirerProject",
+                    ),
                 ],
                 [
                     InlineKeyboardButton(
@@ -135,13 +139,15 @@ async def help_command(_, message):
                 ],
             ]
         )
-           return await message.reply(
-            "Hi there😍, I'm **kaykayX** group management robot pm for help", reply_markup=keyboard
+        return await message.reply_photo("https://telegra.ph/file/aaca50572f08c0a24f6a3.jpg",
+        caption="Hi there😍, I'm **kaykayX** group management robot,", reply_markup=keyboard
         )
     await message.reply(
         home_text_pm,
         reply_markup=home_keyboard_pm,
     )
+
+
 async def help_parser(name, keyboard=None):
     if not keyboard:
         keyboard = InlineKeyboardMarkup(
@@ -150,9 +156,6 @@ async def help_parser(name, keyboard=None):
     return (
         """Hello {first_name}! My name is {bot_name}!
 I'm a group management bot with some useful features.
-═════════════════════════════
-    powered By **Xkaykay**
-═════════════════════════════
 You can choose an option below, by clicking a button.
 Also you can ask anything in Support Group.
 """.format(
