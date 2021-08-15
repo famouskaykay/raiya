@@ -1,22 +1,3 @@
-"""
-MIT License
-Copyright (c) 2021 famouskaykay
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-"""
 import asyncio
 import importlib
 import re
@@ -35,6 +16,7 @@ from wbb.utils.dbfunctions import clean_restart_stage
 loop = asyncio.get_event_loop()
 
 HELPABLE = {}
+
 
 async def start_bot():
     print("[INFO]: STARTING BOT CLIENT")
@@ -93,12 +75,12 @@ async def start_bot():
         except Exception:
             pass
     else:
-        await app.send_message(LOG_GROUP_ID, "**xkaykay** has started🖤!")
+        await app.send_message(LOG_GROUP_ID, "Bot started!")
     await idle()
     print("[INFO]: STOPPING BOT AND CLOSING AIOHTTP SESSION")
     await aiohttpsession.close()
-    
-    
+
+
 home_keyboard_pm = InlineKeyboardMarkup(
     [
         [
@@ -112,7 +94,7 @@ home_keyboard_pm = InlineKeyboardMarkup(
                 callback_data="stats_callback",
             ),
             InlineKeyboardButton(
-                text="Support 👨", url="http://t.me/KayAspirerProject"
+                text="Support 👨", url="http://t.me/WBBSupport"
             ),
         ],
         [
@@ -129,7 +111,8 @@ home_text_pm = (
     + "group with lots of useful features, feel free to "
     + "add me to your group."
 )
-    
+
+
 @app.on_message(filters.command(["help", "start"]))
 async def help_command(_, message):
     if message.chat.type != "private":
@@ -139,54 +122,30 @@ async def help_command(_, message):
                     InlineKeyboardButton(
                         text="Help ❓",
                         url=f"t.me/{BOT_USERNAME}?start=help",
-                    )
+                    ),
+                ],
+                [
+                    InlineKeyboardButton(
+                        text="System Stats 💻",
+                        callback_data="stats_callback",
+                    ),
+                    InlineKeyboardButton(
+                        text="Support 👨", url="t.me/KayAspirerProject"
+                    ),
                 ],
             ]
         )
-        await message.reply(
-            "**hey there😁❤️ I can manage your group with lots of useful features🍆, contact me in pm for more help**", reply_markup=keyboard
-        )
-        return
-    keyboard = InlineKeyboardMarkup(
-        [
-            [
-                InlineKeyboardButton(
-                    text="Commands ❓", callback_data="bot_commands"
-                ),
-            ],
-            [
-                InlineKeyboardButton(
-                    text="System Stats 🛡",
-                    callback_data="stats_callback",
-                ),
-                InlineKeyboardButton(
-                    text="Support🖤👨", url="https://t.me/KayAspirerProject"
-                ),
-            ],
-            [
-                InlineKeyboardButton(
-                    text="plugins 🎉",
-                    url=f"https://t.me/xprograming/7",
-                ),
-              
-                InlineKeyboardButton(
-                    text="fun ❓", callback_data="bot_commands"
-                ),
-            ],
-            [
-                InlineKeyboardButton(
-                    text="Add Me To Your Group 🎉",
-                    url=f"http://t.me/{BOT_USERNAME}?startgroup=new",
-                )
-            ],
-        ]
-    )
-    await message.reply_photo(
+        await message.reply_photo(
         "https://telegra.ph/file/aaca50572f08c0a24f6a3.jpg",
         caption="Hi there😍, I'm **kaykayX** group management robot,"
         + " Choose An Option From Below.",
         reply_markup=keyboard,
     )
+    await message.reply(
+        home_text_pm,
+        reply_markup=home_keyboard_pm,
+    )
+
 
 async def help_parser(name, keyboard=None):
     if not keyboard:
@@ -233,19 +192,19 @@ async def stats_callbacc(_, CallbackQuery):
 
 @app.on_callback_query(filters.regex(r"help_(.*?)"))
 async def help_button(client, query):
+    home_match = re.match(r"help_home\((.+?)\)", query.data)
     mod_match = re.match(r"help_module\((.+?)\)", query.data)
     prev_match = re.match(r"help_prev\((.+?)\)", query.data)
     next_match = re.match(r"help_next\((.+?)\)", query.data)
     back_match = re.match(r"help_back", query.data)
     create_match = re.match(r"help_create", query.data)
-    top_text ="""
-═════════════════════════════
-  powered By **Xkaykay**
-═════════════════════════════
-  **Available commands**.
-  
+    top_text = f"""
+Hello {query.from_user.first_name}! My name is {BOT_NAME}!
+I'm a group management bot with some usefule features.
+You can choose an option below, by clicking a button.
+Also you can ask anything in Support Group.
 General command are:
- - /start: start bot
+ - /start: Start the bot
  - /help: Give this message
  """
     if mod_match:
@@ -270,7 +229,6 @@ General command are:
             ),
             disable_web_page_preview=True,
         )
-        
     elif home_match:
         await app.send_message(
             query.from_user.id,
