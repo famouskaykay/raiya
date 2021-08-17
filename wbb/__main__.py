@@ -112,6 +112,9 @@ home_text_pm = (
     + "add me to your group."
 )
 
+@app.on_message(filters.text("xkaykay"))
+async def xkaykay_text(_, message):
+    await message.reply_text("hi!!")
 
 @app.on_message(filters.command(["help", "start"]))
 async def help_command(_, message):
