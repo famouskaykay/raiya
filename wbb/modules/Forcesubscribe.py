@@ -15,7 +15,6 @@ from pyrogram.types import ChatPermissions, InlineKeyboardButton, InlineKeyboard
 from wbb import BOT_ID
 
 # from wbb import OWNER_ID as SUDO_USERS
-from wbb.services.pyrogram import pbot
 from wbb.services.sql import forceSubscribe_sql as sql
 
 logging.basicConfig(level=logging.INFO)
