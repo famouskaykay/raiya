@@ -115,6 +115,7 @@ home_text_pm = (
     
 @app.on_message(filters.command(["help", "start"]))
 async def help_command(_, message):
+  if message.chat.type != "private":
         keyboard = InlineKeyboardMarkup(
             [
                 [
