@@ -115,17 +115,13 @@ home_text_pm = (
     
 @app.on_message(filters.command(["help", "start"]))
 async def help_command(_, message):
-  if message.chat.type != "private":
+    if message.chat.type != "private":
         keyboard = InlineKeyboardMarkup(
             [
                 [
                     InlineKeyboardButton(
                         text="Help ❓",
                         url=f"t.me/{BOT_USERNAME}?start=help",
-                    ),
-                    InlineKeyboardButton(
-                        text="Repo 🛠",
-                        url="t.me/KayAspirerProject",
                     ),
                 ],
                 [
@@ -134,7 +130,7 @@ async def help_command(_, message):
                         callback_data="stats_callback",
                     ),
                     InlineKeyboardButton(
-                        text="Support 👨", url="t.me/KayAspirerProject"
+                        text="Support group💜", url="t.me/KayAspirerProject"
                     ),
                 ],
             ]
