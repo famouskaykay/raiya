@@ -12,7 +12,7 @@ from pyrogram.errors.exceptions.bad_request_400 import (
 )
 from pyrogram.types import ChatPermissions, InlineKeyboardButton, InlineKeyboardMarkup
 
-from sample_config import BOT_ID
+from wbb import BOT_ID
 
 # from wbb import OWNER_ID as SUDO_USERS
 from wbb.services.pyrogram import pbot
