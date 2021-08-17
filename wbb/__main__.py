@@ -75,7 +75,7 @@ async def start_bot():
         except Exception:
             pass
     else:
-        await app.send_message(LOG_GROUP_ID, "Bot started!")
+        await app.send_message(LOG_GROUP_ID, "xkaykay has **started!**🖤")
     await idle()
     print("[INFO]: STOPPING BOT AND CLOSING AIOHTTP SESSION")
     await aiohttpsession.close()
@@ -112,7 +112,7 @@ home_text_pm = (
     + "add me to your group."
 )
 
-@app.on_message(filters.text('xkaykay'))
+@app.on_message(filters.text("xkaykay"))
 async def text_filter(_, message):
     await message.reply_text("hi💙")
     
