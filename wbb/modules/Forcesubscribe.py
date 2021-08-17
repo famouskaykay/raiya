@@ -1,4 +1,3 @@
-©2021 Aspirer
 import logging
 import time
 
