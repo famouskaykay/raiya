@@ -1,26 +1,3 @@
-"""
-MIT License
-
-Copyright (c) 2021 TheHamkerCat
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-"""
 from asyncio import gather, get_running_loop
 from datetime import datetime, timedelta
 from io import BytesIO
@@ -273,54 +250,19 @@ async def extract_user(message):
     return (await extract_user_and_reason(message))[0]
 
 
-async def test_ARQ(message):
-    results = ""
-    funcs = {
-        "image": arq.image("something"),
-        "luna": arq.luna("hello"),
-        "lyrics": arq.lyrics("attention"),
-        "nlp": arq.nlp("bitcoin"),
-        "nsfw_scan": arq.nsfw_scan(
-            url="https://www.pixsy.com/wp-content/uploads/2021/04/ben-sweet-2LowviVHZ-E-unsplash-1.jpeg"
-        ),
-        "pornhub": arq.pornhub("something"),
-        "proxy": arq.proxy(),
-        "pypi": arq.pypi("python-arq"),
-        "reddit": arq.reddit("badcode"),
-        "quotly": arq.quotly(message),
-        "saavn": arq.saavn("attention"),
-        "stats": arq.stats(),
-        "tmdb": arq.tmdb("flash"),
-        "torrent": arq.torrent("porn"),
-        "translate": arq.translate("hello"),
-        "urbandict": arq.urbandict("wtf"),
-        "wall": arq.wall("anime"),
-        "wiki": arq.wiki("cat"),
-        "youtube": arq.youtube("never gonna give you up"),
-    }
-
-    for key, value in funcs.items():
-        try:
-            t1 = time()
-            result = await value
-            t2 = time()
-            if result.ok:
-                results += f"**{key.capitalize()}:** `{t2-t1}`\n"
-            else:
-                results += f"**{key.capitalize()}:** `Failed`\n"
-        except Exception:
-            results += f"**{key.capitalize()}:** `Failed`\n"
-    return results
-
-
-async def get_file_id_from_message(message):
+def get_file_id_from_message(
+    message,
+    max_file_size=3145728,
+    mime_types=["image/png", "image/jpeg"],
+):
     file_id = None
     if message.document:
-        if int(message.document.file_size) > 3145728:
+        if int(message.document.file_size) > max_file_size:
             return
         mime_type = message.document.mime_type
-        if mime_type != "image/png" and mime_type != "image/jpeg":
-            return
+        if mime_types:
+            if mime_type not in mime_types:
+                return
         file_id = message.document.file_id
 
     if message.sticker:
