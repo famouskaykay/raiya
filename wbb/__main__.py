@@ -13,7 +13,6 @@ from wbb.modules.sudoers import bot_sys_stats
 from wbb.utils import paginate_modules
 from wbb.utils.dbfunctions import clean_restart_stage
 
-from .assistant import Assistant
 
 
 loop = asyncio.get_event_loop()
