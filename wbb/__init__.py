@@ -22,6 +22,7 @@ print("[INFO]: INITIALIZING")
 import asyncio
 import logging
 import time
+import DB_URI
 from os import path
 
 from aiohttp import ClientSession
