@@ -24,6 +24,5 @@ python-dotenv
 feedparser
 pyromod
 TgCrypto
-pyrogram==1.0.1
 sqlalchemy
 psycopg2
