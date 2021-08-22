@@ -2,7 +2,7 @@ import os
 import sys
 DEFAULTS(
     LOGGER = True,
-    "OWNER_ID": default,
+    OWNER_ID == default,
 def get_str_key(name, required=False):
     if name in DEFAULTS:
         default = DEFAULTS[name]
