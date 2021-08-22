@@ -4,7 +4,7 @@ DEFAULTS(
     LOGGER = True,
     OWNER_ID == default,
     
-def get_str_key(name, required=False):
+def get_str_key(name, required=False, **kwargs):
     if name in DEFAULTS:
         default = DEFAULTS[name]
     else:
