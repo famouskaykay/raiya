@@ -12,7 +12,7 @@ class Config():
     SUDO_USERS = list(set(SUDO_USERS))
   else:
     BOT_TOKEN = ""
-    DATABASE_URL = ""
+    DATABASE_URL = "mysql://dt_admin:dt2016@localhost:3308/dreamteam_db"
     APP_ID = ""
     API_HASH = ""
     SUDO_USERS = list(set(int(x) for x in ''.split()))
