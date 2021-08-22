@@ -24,7 +24,7 @@ from wbb.services.sql import forceSubscribe_sql as sql
 logging.basicConfig(level=logging.INFO)
 
 static_data_filter = filters.create(
-    lambda _, , query: query.data == "onUnMuteRequest"
+    lambda _,  query: query.data == "onUnMuteRequest"
 )
 
 @pbot.on_callback_query(static_data_filter)
