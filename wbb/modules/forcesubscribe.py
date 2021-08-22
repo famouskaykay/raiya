@@ -186,8 +186,8 @@ def config(client, message):
                     message.reply_text(f"**Invalid Channel Username.**")
                 except Exception as err:
                     message.reply_text(f"**ERROR:**
-{err}
-")
+                                       {err}
+                                       ")
         else:
             if sql.fs_settings(chat_id):
                 message.reply_text(
