@@ -1,22 +1,18 @@
 if not __name__.endswith("config"):
     import sys
-    print("The README is there to be read. Extend this sample config to a config file, don't just rename and change "
+    print("ogei"
           "values here. Doing that WILL backfire on you.\nBot quitting.", file=sys.stderr)
     quit(1)
-
-
-# Create a new config.py file in same dir and import, then extend this class.
+    
 class Config(object):
     LOGGER = True
-
-    # REQUIRED
-    API_KEY = "7286701"
-    OWNER_ID = "1917528355" # If you dont know, run the bot and do /id in your private chat with it
+    get_int_key = ""
+    get_str_key = ""
+    OWNER_ID = "1917528355" 
     OWNER_USERNAME = "kaykay"
 
     # RECOMMENDED
-    SQLALCHEMY_DATABASE_URI = 'sqldbtype://username:pw@hostname:port/db_name'  # needed for any database modules
-    MESSAGE_DUMP = None  # needed to make sure 'save from' messages persist
+    SQLALCHEMY_DATABASE_URI = 'sqldbtype://username:pw@hostname:port/db_name'  # needed for any database module
     LOAD = []
     NO_LOAD = ['translation', 'rss']
     WEBHOOK = False
@@ -32,7 +28,6 @@ class Config(object):
     DEL_CMDS = False  # Whether or not you should delete "blue text must click" commands
     STRICT_GBAN = False
     WORKERS = 8  # Number of subthreads to use. This is the recommended amount - see for yourself what works best!
-    BAN_STICKER = 'CAADAgADOwADPPEcAXkko5EB3YGYAg'  # banhammer marie sticker
     ALLOW_EXCL = False  # Allow ! commands as well as /
 
 
