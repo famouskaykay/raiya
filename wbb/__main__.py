@@ -3,7 +3,7 @@ import importlib
 import re
 
 import uvloop
-from pyrogram import filters, idle
+from pyrogram import Client, filters, idle
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 from wbb import (BOT_NAME, BOT_USERNAME, LOG_GROUP_ID, USERBOT_NAME,
@@ -151,7 +151,7 @@ def map(pos):
             [InlineKeyboardButton(text = 'Next', callback_data = "help+2")]
         ]
     elif(pos==len(tr.HELP_MSG)-1):
-        url = "https://github.com/famouskaykay/raiyat"
+        url = "https://github.com/famouskaykay/raiya"
         button = [
             [InlineKeyboardButton(text = 'Support Us', url="https://t.me/KayAspirerProject")],
             [InlineKeyboardButton(text = 'Feature Request & Issues', url=url)],
