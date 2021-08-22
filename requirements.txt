@@ -26,3 +26,5 @@ pyromod
 TgCrypto
 sqlalchemy
 psycopg2
+mysql-connector-python
+mysql-python
