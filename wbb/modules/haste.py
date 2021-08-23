@@ -1,6 +1,6 @@
 import requests
 
-from pyrogram import Client, Filters
+from pyrogram import Client, filters
 
 BASE = "https://hastebin.com"
 
