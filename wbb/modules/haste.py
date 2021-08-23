@@ -5,7 +5,9 @@ from pyrogram import Client, filters
 BASE = "https://hastebin.com"
 
 
-@Client.on_message(filters.command("haste", prefix="!") & filters.reply & ~filters.edited & filters.group)
+@app.on_message(
+    filters.command("haste", prefix="!") & filters.reply & ~filters.edited & filters.group
+)
 def haste(client, message):
     reply = message.reply_to_message
 
