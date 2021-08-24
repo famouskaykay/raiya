@@ -45,6 +45,10 @@ __HELP__ = """
         To remove a user from sudoers.
 `.sudoers`
         To list sudo users.
+`.download [URL or reply to a file]`
+        Download a file from TG or URL
+`.upload [URL or File Path]`
+        Upload a file from local or URL
 """
 
 
