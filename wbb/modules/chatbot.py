@@ -162,7 +162,7 @@ async def aspirer(client, message):
         except Exception:
             return
     try:
-        await daisyx.send_chat_action(message.chat.id, "typing")
+        await app.send_chat_action(message.chat.id, "typing")
         await message.reply_text(pro)
     except CFError:
         return
