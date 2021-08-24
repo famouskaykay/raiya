@@ -1,3 +1,4 @@
+import re
 import emoji
 
 from asyncio import gather, sleep
