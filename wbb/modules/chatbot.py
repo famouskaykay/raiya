@@ -3,6 +3,7 @@ import emoji
 
 from asyncio import gather, sleep
 
+from googletrans import Translator as google_translator
 from pyrogram import filters
 from pyrogram.types import Message
 
@@ -12,6 +13,8 @@ from wbb.core.decorators.errors import capture_err
 from wbb.modules.userbot import eor
 from wbb.utils.filter_groups import chatbot_group
 
+
+translator = google_translator()
 
 __MODULE__ = "ChatBot"
 __HELP__ = """
@@ -85,6 +88,8 @@ async def type_and_send(message: Message):
         responsess2 = responsess
     await message.reply_text(responsess2)
     await message._client.send_chat_action(chat_id, "cancel")
+    
+    
 @app.on_message(
     filters.regex("kaykay|Kaykay|KAYKAY")
     & ~filters.bot
@@ -140,6 +145,7 @@ async def aspirer(client, message):
             test = test.text
         except:
             return
+          await type_and_send(message)
         
      
     
