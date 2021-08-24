@@ -1,22 +1,14 @@
-import re
-
-url = "https://acobot-brainshop-ai-v1.p.rapidapi.com/get"
-import re
-
-import aiohttp
 from asyncio import gather, sleep
 
 from pyrogram import filters
 from pyrogram.types import Message
-from googletrans import Translator as google_translator
 
 from wbb import (BOT_ID, SUDOERS, USERBOT_ID, USERBOT_PREFIX,
                  USERBOT_USERNAME, app, app2, arq)
 from wbb.core.decorators.errors import capture_err
-from wbb.modules.userbot import edit_or_reply
+from wbb.modules.userbot import eor
 from wbb.utils.filter_groups import chatbot_group
 
-translator = google_translator()
 
 __MODULE__ = "ChatBot"
 __HELP__ = """
@@ -34,39 +26,21 @@ async def chat_bot_toggle(db, message: Message):
         if chat_id not in db:
             db.append(chat_id)
             text = "Chatbot Enabled!"
-            return await edit_or_reply(message, text=text)
-        await edit_or_reply(
-            message, text="ChatBot Is Already Enabled."
-        )
+            return await eor(message, text=text)
+        await eor(message, text="ChatBot Is Already Enabled.")
     elif status == "disable":
         if chat_id in db:
             db.remove(chat_id)
-            return await edit_or_reply(
-                message, text="Chatbot Disabled!"
-            )
-        await edit_or_reply(
-            message, text="ChatBot Is Already Disabled."
-        )
+            return await eor(message, text="Chatbot Disabled!")
+        await eor(message, text="ChatBot Is Already Disabled.")
     else:
-        await edit_or_reply(
+        await eor(
             message, text="**Usage:**\n/chatbot [ENABLE|DISABLE]"
         )
 
 
 # Enabled | Disable Chatbot
-async def fetch(url):
-    try:
-        async with aiohttp.Timeout(10.0):
-            async with aiohttp.ClientSession() as session:
-                async with session.get(url) as resp:
-                    try:
-                        data = await resp.json()
-                    except:
-                        data = await resp.text()
-            return data
-    except:
-        print("AI response Timeout")
-        return
+
 
 
 @app.on_message(filters.command("chatbot") & ~filters.edited)
@@ -92,11 +66,11 @@ async def type_and_send(message: Message):
     await message._client.send_chat_action(chat_id, "typing")
     response, _ = await gather(lunaQuery(query, user_id), sleep(1))
     if "Luna" in response:
-        responsee = response.replace("Luna", "kaykay")
+        responsee = response.replace("Luna", "xkaykay")
     else:
         responsee = response
     if "Aco" in responsee:
-        responsess = responsee.replace("Aco", "kaykay")
+        responsess = responsee.replace("Aco", "xkaykay")
     else:
         responsess = responsee
     if "Who is Tiana?" in responsess:
@@ -139,7 +113,7 @@ async def chatbot_talk(_, message: Message):
 @capture_err
 async def chatbot_status_ubot(_, message: Message):
     if len(message.text.split()) != 2:
-        return await edit_or_reply(
+        return await eor(
             message, text="**Usage:**\n.chatbot [ENABLE|DISABLE]"
         )
     await chat_bot_toggle(active_chats_ubot, message)
