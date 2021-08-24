@@ -1,7 +1,7 @@
-from asyncio import gather, get_running_loop
+from asyncio import gather
 from datetime import datetime, timedelta
 from io import BytesIO
-from math import atan2, cos, radians, sin, sqrt
+from math import atan2, cos, floor, radians, sin, sqrt
 from os import execvp
 from random import randint
 from re import findall
@@ -14,27 +14,45 @@ import aiohttp
 import speedtest
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 from pyrogram.types import Message
-from wget import download
+from pyrogram.errors import MessageNotModified
 
 from wbb import aiohttpsession as aiosession
-from wbb import arq
-from wbb.utils import aiodownloader
+from wbb.modules.userbot import eor
 from wbb.utils.dbfunctions import start_restart_stage
 from wbb.utils.http import get
 
+
+async def progress(
+    current: int,
+    total: int,
+    start: int,
+    task_id: int,
+    message: Message,
+):
+    percentage = current / total * 100
+    elapsed = time() - start
+    speed = (current / 1000000) / elapsed  # In MB/s
+    eta = (100 / percentage * elapsed) / 60  # In Minutes
+
+    if round(elapsed % 10.00) != 0 and current != total:
+        return
+
+    round_pct = floor(percentage / 10)
+
+    bar = ("▰" * round_pct) + ("▱" * (10 - round_pct))
+
+    text = f"""
+{bar}
+**Progress:** {int(percentage)}%
+**Speed:** {round(speed, 2)}MB/s
+**ETA:** {round(eta, 2)}m
+**Task ID:** {task_id}
 """
-Just import 'downloader' anywhere and do downloader.download() to
-download file from a given url
-"""
-downloader = aiodownloader.Handler()
-
-# Another downloader, but with wget
-
-
-async def download_url(url: str):
-    loop = get_running_loop()
-    file = await loop.run_in_executor(None, download, url)
-    return file
+    try:
+        await eor(message, text=text)
+    except MessageNotModified:
+        print("MessageNotModified: progress func")
+        pass
 
 
 async def restart(m: Message):
@@ -105,12 +123,6 @@ def test_speedtest():
     download = speed.download()
     upload = speed.upload()
     return [speed_convert(download), speed_convert(upload), info]
-
-
-async def file_size_from_url(url: str) -> int:
-    async with aiosession.head(url) as resp:
-        size = int(resp.headers["content-length"])
-    return size
 
 
 async def get_http_status_code(url: str) -> int:
