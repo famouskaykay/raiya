@@ -1,7 +1,7 @@
 from pyrogram import filters
 
 from wbb import BOT_USERNAME, SUDOERS, USERBOT_PREFIX, app2
-from wbb.modules.userbot import edit_or_reply
+from wbb.modules.userbot import eor
 
 
 @app2.on_message(
@@ -13,9 +13,7 @@ from wbb.modules.userbot import edit_or_reply
 )
 async def create(_, message):
     if len(message.command) < 3:
-        return await edit_or_reply(
-            message, text="__**.create (b|s|c) Name**__"
-        )
+        return await eor(message, text="__**.create (b|s|c) Name**__")
     group_type = message.command[1]
     split = message.command[2:]
     group_name = " ".join(split)
@@ -25,7 +23,7 @@ async def create(_, message):
     if group_type == "b":  # for basicgroup
         _id = await app2.create_group(group_name, BOT_USERNAME)
         link = await app2.get_chat(_id["id"])
-        await edit_or_reply(
+        await eor(
             message,
             text=f"**Basicgroup Created: [{group_name}]({link['invite_link']})**",
             disable_web_page_preview=True,
@@ -33,7 +31,7 @@ async def create(_, message):
     elif group_type == "s":  # for supergroup
         _id = await app2.create_supergroup(group_name, desc)
         link = await app2.get_chat(_id["id"])
-        await edit_or_reply(
+        await eor(
             message,
             text=f"**Supergroup Created: [{group_name}]({link['invite_link']})**",
             disable_web_page_preview=True,
@@ -41,7 +39,7 @@ async def create(_, message):
     elif group_type == "c":  # for channel
         _id = await app2.create_channel(group_name, desc)
         link = await app2.get_chat(_id["id"])
-        await edit_or_reply(
+        await eor(
             message,
             text=f"**Channel Created: [{group_name}]({link['invite_link']})**",
             disable_web_page_preview=True,
