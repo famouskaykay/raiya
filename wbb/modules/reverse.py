@@ -1,24 +1,32 @@
 import os
-from asyncio import get_running_loop
+from asyncio import gather, get_running_loop
+from base64 import b64decode
+from io import BytesIO
 from random import randint
 
 import aiofiles
-import aiohttp
 import requests
 from bs4 import BeautifulSoup
 from pyrogram import filters
+from pyrogram.types import InputMediaPhoto, Message
 
-from wbb import app
+from wbb import MESSAGE_DUMP_CHAT, app
 from wbb.core.decorators.errors import capture_err
 from wbb.utils.functions import get_file_id_from_message
+from wbb.utils.http import get
+
+
+async def get_soup(url: str, headers):
+    html = await get(url, headers=headers)
+    return BeautifulSoup(html, "html.parser")
 
 
 @app.on_message(filters.command("reverse"))
 @capture_err
-async def reverse_image_search(_, message):
+async def reverse_image_search(_, message: Message):
     if not message.reply_to_message:
         return await message.reply_text(
-            "tag message ili ureverse search ."
+            "Reply to a message to reverse search it."
         )
     reply = message.reply_to_message
     if (
@@ -29,16 +37,15 @@ async def reverse_image_search(_, message):
         and not reply.video
     ):
         return await message.reply_text(
-            "tag picha/document/sticker/animation ili ureverse search ."
+            "Reply to an image/document/sticker/animation to reverse search it."
         )
-    m = await message.reply_text("Downloading")
-    file_id = await get_file_id_from_message(reply)
+    m = await message.reply_text("Searching...")
+    file_id = get_file_id_from_message(reply)
     if not file_id:
         return await m.edit("Can't reverse that")
     image = await app.download_media(
         file_id, f"{randint(1000, 10000)}.jpg"
     )
-    await m.edit("Uploading to google's server")
     async with aiofiles.open(image, "rb") as f:
         if image:
             search_url = "http://www.google.com/searchbyimage/upload"
@@ -63,21 +70,56 @@ async def reverse_image_search(_, message):
     headers = {
         "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:58.0) Gecko/20100101 Firefox/58.0"
     }
-    await m.edit("Scraping query")
-    async with aiohttp.ClientSession() as session:
-        async with session.get(location, headers=headers) as resp:
-            soup = BeautifulSoup(await resp.text(), "html.parser")
-    div = soup.find_all("div", {"class": "r5a77d"})[0]
-    anchor_element = div.find("a")
-    text = anchor_element.text
+
     try:
-        await m.edit("jaribu kutuma picha")
-        await app.send_photo(
-            message.chat.id,
-            photo=f"https://webshot.amanoteam.com/print?q={location}",
-            caption=f"**Result**: [{text}]({location})",
-        )
-        await m.delete()
+        soup = await get_soup(location, headers=headers)
+        div = soup.find_all("div", {"class": "r5a77d"})[0]
+        text = div.find("a").text
+        text = f"**Result**: [{text}]({location})"
     except Exception:
-        text = f"**Result**: [Link]({location})"
-        await m.edit(text)
+        return await m.edit(f"**Result**: [Link]({location})")
+
+    # Pass if no images detected
+    try:
+        url = "https://google.com" + soup.find_all(
+            "a", {"class": "ekf0x hSQtef"}
+        )[0].get("href")
+
+        soup = await get_soup(url, headers=headers)
+
+        media = []
+        for img in soup.find_all("img"):
+            if len(media) == 2:
+                break
+
+            if img.get("src"):
+                img = img.get("src")
+                if "image/gif" in img:
+                    continue
+
+                img = BytesIO(b64decode(img))
+                img.name = "img.png"
+                media.append(img)
+            elif img.get("data-src"):
+                img = img.get("data-src")
+                media.append(img)
+
+        # Cache images, so we can use file_ids
+        tasks = [
+            app.send_photo(MESSAGE_DUMP_CHAT, img) for img in media
+        ]
+        messages = await gather(*tasks)
+
+        await message.reply_media_group(
+            [
+                InputMediaPhoto(
+                    i.photo.file_id,
+                    caption=text,
+                )
+                for i in messages
+            ]
+        )
+    except Exception:
+        pass
+
+    await m.edit(text)
