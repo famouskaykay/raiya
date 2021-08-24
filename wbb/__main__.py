@@ -137,7 +137,7 @@ async def help_command(_, message):
                 ],
             ]
         )
-        return await message.reply_photo("https://telegra.ph/file/aaca50572f08c0a24f6a3.jpg",
+        return await message.reply_photo("https://telegra.ph/file/ef43160faf5e756998419.mp4",
         caption="Hi there😍, I'm **kaykayX** group management robot,", reply_markup=keyboard
         )
     await message.reply(
