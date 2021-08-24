@@ -1,12 +1,15 @@
 import imghdr
 import os
+from asyncio import gather
 from traceback import format_exc
 
 from pyrogram import filters
-from pyrogram.errors.exceptions.bad_request_400 import (
-    PeerIdInvalid, ShortnameOccupyFailed, StickerEmojiInvalid,
-    StickerPngDimensions, StickerPngNopng, UserIsBlocked)
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from pyrogram.errors import (PeerIdInvalid, ShortnameOccupyFailed,
+                             StickerEmojiInvalid,
+                             StickerPngDimensions, StickerPngNopng,
+                             UserIsBlocked)
+from pyrogram.types import (InlineKeyboardButton,
+                            InlineKeyboardMarkup, Message)
 
 from wbb import BOT_USERNAME, app
 from wbb.core.decorators.errors import capture_err
@@ -18,8 +21,13 @@ from wbb.utils.stickerset import (add_sticker_to_set, create_sticker,
                                   get_sticker_set_by_name)
 
 __MODULE__ = "Stickers"
-__HELP__ = """/sticker_id -kupata File ID ya Sticker.
-/kang - ku Kang  Sticker ama picha."""
+__HELP__ = """
+/sticker_id
+    To get FileID of a Sticker.
+/get_sticker
+    To get sticker as a photo and document.
+/kang
+    To kang a Sticker or an Image."""
 
 MAX_STICKERS = 120  # would be better if we could fetch this limit directly from telegram
 SUPPORTED_TYPES = ["jpeg", "png", "webp"]
@@ -27,25 +35,53 @@ SUPPORTED_TYPES = ["jpeg", "png", "webp"]
 
 @app.on_message(filters.command("sticker_id") & ~filters.edited)
 @capture_err
-async def sticker_id(_, message):
-    if not message.reply_to_message:
-        return await message.reply_text("tagi sticker.")
-    if not message.reply_to_message.sticker:
-        return await message.reply_text("tagi sticker.")
-    file_id = message.reply_to_message.sticker.file_id
-    await message.reply_text(f"`{file_id}`")
+async def sticker_id(_, message: Message):
+    reply = message.reply_to_message
+
+    if not reply:
+        return await message.reply("Reply to a sticker.")
+
+    if not reply.sticker:
+        return await message.reply("Reply to a sticker.")
+
+    await message.reply_text(f"`{reply.sticker.file_id}`")
+
+
+@app.on_message(filters.command("get_sticker") & ~filters.edited)
+@capture_err
+async def sticker_image(_, message: Message):
+    r = message.reply_to_message
+
+    if not r:
+        return await message.reply("Reply to a sticker.")
+
+    if not r.sticker:
+        return await message.reply("Reply to a sticker.")
+
+    m = await message.reply("Sending..")
+    f = await r.download(f"{r.sticker.file_unique_id}.png")
+
+    await gather(
+        *[
+            message.reply_photo(f),
+            message.reply_document(f),
+        ]
+    )
+
+    await m.delete()
+    os.remove(f)
 
 
 @app.on_message(filters.command("kang") & ~filters.edited)
 @capture_err
-async def kang(client, message):
+async def kang(client, message: Message):
     if not message.reply_to_message:
         return await message.reply_text(
-            "tag kwa sticker/pichae ili u kang."
+            "Reply to a sticker/image to kang it."
         )
     if not message.from_user:
         return await message.reply_text(
-            "Wewe ni mtawala wa anon, kang stika katika pm yangu."
+            "You are anon admin, kang stickers in my pm."
         )
     msg = await message.reply_text("Kanging Sticker..")
 
@@ -86,9 +122,9 @@ async def kang(client, message):
                     temp_file_path
                 )
             except OSError as e:
-                await msg.edit_text("imekataa sijui mbona.")
+                await msg.edit_text("Something wrong happened.")
                 raise Exception(
-                    f"imekataa kuresize sticker  (at {temp_file_path}); {e}"
+                    f"Something went wrong while resizing the sticker (at {temp_file_path}); {e}"
                 )
                 return False
             sticker = await create_sticker(
@@ -172,14 +208,14 @@ async def kang(client, message):
             ]
         )
         await msg.edit(
-            "Unahitaji kuanza mazungumzo ya faragha na mimi.",
+            "You Need To Start A Private Chat With Me.",
             reply_markup=keyboard,
         )
     except StickerPngNopng:
         await message.reply_text(
-            "stickers lazima ziwe faili za png lakini picha iliyotolewa haikuwa png"
+            "Stickers must be png files but the provided image was not a png"
         )
     except StickerPngDimensions:
         await message.reply_text(
-            "Vipimo vya sticker ni mbaya"
+            "The sticker png dimensions are invalid."
         )
