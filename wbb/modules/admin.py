@@ -13,27 +13,27 @@ from wbb.utils.functions import (extract_user,
                                  time_converter)
 
 __MODULE__ = "Admin"
-__HELP__ = """/ban - Kupiga marufuku mtumiaji
-/dban - Futa ujumbe uliojibu kupiga marufuku mtumaji wake
-/tban - Piga marufuku mtumiaji kwa muda maalum
-/unban - Ondoa Mtumiaji
-/warn - Onyo mtumiaji
-/dwarn - Futa tahadhari ya ujumbe uliojibuwa
-/rmwarn - Ondoa onyo 1 la mtumiaji
-/rmwarns - Ondoa onyo zotte za mtumiajir
-/warns - Onyesha Tahadhari ya Mtumiaji
-/kick - piga mtumiaji
-/dkick - Futa ujumbe uliojibu uteketeze mtumaji wake
-/purge - Tapisha Ujumbe
-/del - Futa Ujumbe Uliojibu
-/promote - Kukuza Mwanachama
-/demote - Msambaratishe Mwanachama
-/pin - Bana Ujumbe
-/mute - Nyamazisha Mtumiaji
-/tmute - Nyamazisha mtumiaji kwa muda maalum
+__HELP__ = """/ban - Ban A User
+/dban - Delete the replied message banning its sender
+/tban - Ban A User For Specific Time
+/unban - Unban A User
+/warn - Warn A User
+/dwarn - Delete the replied message warning its sender
+/rmwarn - Remove 1 Warning Of A User
+/rmwarns - Remove All Warning of A User
+/warns - Show Warning Of A User
+/kick - Kick A User
+/dkick - Delete the replied message kicking its sender
+/purge - Purge Messages
+/del - Delete Replied Message
+/promote - Promote A Member
+/demote - Demote A Member
+/pin - Pin A Message
+/mute - Mute A User
+/tmute - Mute A User For Specific Time
 /unmute - Unmute A User
-/ban_ghosts - Kupiga marufuku Akaunti Zilizofutwa
-/report | @admins - Ripoti Ujumbe kwa Watawala."""
+/ban_ghosts - Ban Deleted Accounts
+/report | @admins - Report A Message To Admins."""
 
 
 async def member_permissions(chat_id: int, user_id: int):
@@ -122,29 +122,39 @@ async def list_members(group_id):
 )
 @adminsOnly("can_delete_messages")
 async def purgeFunc(client, message: Message):
-    chat_id = message.chat.id
-    message_ids = []
-    if message.chat.type not in ("supergroup", "channel"):
-        return
+    await message.delete()
+
     if not message.reply_to_message:
         return await message.reply_text(
-            "Reply to a message to delete from, don't make fun of yourself!"
+            "Reply to a message to purge from."
         )
-    await message.delete()
-    for a_s_message_id in range(
-        message.reply_to_message.message_id, message.message_id
+
+    chat_id = message.chat.id
+    message_ids = []
+
+    for message_id in range(
+        message.reply_to_message.message_id,
+        message.message_id,
     ):
-        message_ids.append(a_s_message_id)
+        message_ids.append(message_id)
+
+        # Max message deletion limit is 100
         if len(message_ids) == 100:
-            await client.delete_messages(
+            await app.delete_messages(
                 chat_id=chat_id,
                 message_ids=message_ids,
-                revoke=True,
+                revoke=True,  # For both sides
             )
+
+            # To delete more than 100 messages, start again
             message_ids = []
+
+    # Delete if any messages left
     if len(message_ids) > 0:
-        await client.delete_messages(
-            chat_id=chat_id, message_ids=message_ids, revoke=True
+        await app.delete_messages(
+            chat_id=chat_id,
+            message_ids=message_ids,
+            revoke=True,
         )
 
 
@@ -160,14 +170,14 @@ async def purgeFunc(client, message: Message):
 async def kickFunc(_, message: Message):
     user_id, reason = await extract_user_and_reason(message)
     if not user_id:
-        return await message.reply_text("simpati")
+        return await message.reply_text("I can't find that user.")
     if user_id == BOT_ID:
         return await message.reply_text(
-            "siwezi jitoa morio ntakuacha."
+            "I can't kick myself, i can leave if you want."
         )
     if user_id in SUDOERS:
         return await message.reply_text(
-            "Unataka kuteketeza Aliyeinuliwa?"
+            "You Wanna Kick The Elevated One?"
         )
     if user_id in (await list_admins(message.chat.id)):
         return await message.reply_text(
@@ -198,18 +208,18 @@ async def kickFunc(_, message: Message):
 async def banFunc(_, message: Message):
     user_id, reason = await extract_user_and_reason(message)
     if not user_id:
-        return await message.reply_text("simpati.")
+        return await message.reply_text("I can't find that user.")
     if user_id == BOT_ID:
         return await message.reply_text(
-            "siwezi jiban morio ntakuburn."
+            "I can't ban myself, i am elevated."
         )
     if user_id in SUDOERS:
         return await message.reply_text(
-            "Unataka kuteketeza Aliyeinuliwa??, RECONSIDER!"
+            "You Wanna Ban The Elevated One?, RECONSIDER!"
         )
     if user_id in (await list_admins(message.chat.id)):
         return await message.reply_text(
-            "I can't ban an admin, You know the rules, so do i."
+            "morio siwezi ban admin, unajua rules, usikue mjinga."
         )
     mention = (await app.get_users(user_id)).mention
     msg = (
@@ -299,7 +309,7 @@ async def promoteFunc(_, message: Message):
         return await message.reply_text("I can't promote myself.")
     if not bot.can_promote_members:
         return await message.reply_text(
-            "I don't have enough permissions"
+            "add grant admin permissopn"
         )
     await message.chat.promote_member(
         user_id=user_id,
@@ -312,7 +322,7 @@ async def promoteFunc(_, message: Message):
         can_manage_chat=bot.can_manage_chat,
         can_manage_voice_chats=bot.can_manage_voice_chats,
     )
-    await message.reply_text("Promoted!")
+    await message.reply_text("Elevated!")
 
 
 # Demote Member
@@ -394,7 +404,7 @@ async def mute(_, message: Message):
         )
     if user_id in (await list_admins(message.chat.id)):
         return await message.reply_text(
-            "I can't mute an admin, You know the rules, so do i."
+            "siwezi mute admin, You know the rules, na usiwe mjinga."
         )
     await message.chat.restrict_member(
         user_id, permissions=ChatPermissions()
