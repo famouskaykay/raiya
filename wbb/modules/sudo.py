@@ -3,23 +3,20 @@ from pyrogram.types import Message
 
 from wbb import BOT_ID, SUDOERS, USERBOT_PREFIX, app2
 from wbb.core.decorators.errors import capture_err
-from wbb.modules.userbot import edit_or_reply
+from wbb.modules.userbot import eor
 from wbb.utils.dbfunctions import add_sudo, get_sudoers, remove_sudo
 from wbb.utils.functions import restart
 
 __MODULE__ = "Sudo"
 __HELP__ = """
-**MODULI HII NI KWA AJILI YA DEVELOPERS TU**
-
-.useradd - Kuongeza Mtumiaji Katika Sudoers.
-.userdel - Kutoa Mtumiaji Katika Sudoers
-.sudoers - Kuorodhesha Watumiaji wa Sudo.
-
+**THIS MODULE IS ONLY FOR DEVS**
+.useradd - To Add A User In Sudoers.
+.userdel - To Remove A User From Sudoers.
+.sudoers - To List Sudo Users.
 **NOTE:**
-
-Wala msiongezee mwenye kufuru, isipo kuwa kwa kuamini.
-watumiaji wa sudo wanaweza kufanya chochote na akaunti yako,
-inaweza hata kufuta akaunti yako.
+Never add anyone to sudoers unless you trust them,
+sudo users can do anything with your account, they
+can even delete your account.
 """
 
 
@@ -30,30 +27,26 @@ inaweza hata kufuta akaunti yako.
 @capture_err
 async def useradd(_, message: Message):
     if not message.reply_to_message:
-        return await edit_or_reply(
+        return await eor(
             message,
-            text="Jibu ujumbe wa mtu wa kumongeza kwa sudoer.",
+            text="Reply to someone's message to add him to sudoers.",
         )
     user_id = message.reply_to_message.from_user.id
     sudoers = await get_sudoers()
     if user_id in sudoers:
-        return await edit_or_reply(
-            message, text="Mtumiaji tayari yuko katika sudoer."
-        )
+        return await eor(message, text="User is already in sudoers.")
     if user_id == BOT_ID:
-        return await edit_or_reply(
-            message, text="Huwezi kuongeza bot msaidizi katika sudoers."
+        return await eor(
+            message, text="You can't add assistant bot in sudoers."
         )
     added = await add_sudo(user_id)
     if added:
-        await edit_or_reply(
+        await eor(
             message,
-            text="Imefanikiwa kuongeza mtumiaji katika sudoers, Bot itaanzishwa upya sasa.",
+            text="Successfully added user in sudoers, Bot will be restarted now.",
         )
         return await restart(None)
-    await edit_or_reply(
-        message, text="Kitu kibaya kilitokea, angalia logs."
-    )
+    await eor(message, text="Something wrong happened, check logs.")
 
 
 @app2.on_message(
@@ -63,25 +56,21 @@ async def useradd(_, message: Message):
 @capture_err
 async def userdel(_, message: Message):
     if not message.reply_to_message:
-        return await edit_or_reply(
+        return await eor(
             message,
-            text="Jibu ujumbe wa mtu wa kumwondoa kwenye sudoers.",
+            text="Reply to someone's message to remove him to sudoers.",
         )
     user_id = message.reply_to_message.from_user.id
     if user_id not in await get_sudoers():
-        return await edit_or_reply(
-            message, text="mtumiaji hayuko sudoers."
-        )
+        return await eor(message, text="User is not in sudoers.")
     removed = await remove_sudo(user_id)
     if removed:
-        await edit_or_reply(
+        await eor(
             message,
-            text="Imefanikiwa kuondolewa mtumiaji kutoka kwa sudoer, Bot itaanzishwa upya sasa.",
+            text="Successfully removed user from sudoers, Bot will be restarted now.",
         )
         return await restart(None)
-    await edit_or_reply(
-        message, text="Kitu kibaya kilitokea, angalia logs."
-    )
+    await eor(message, text="Something wrong happened, check logs.")
 
 
 @app2.on_message(
@@ -96,4 +85,4 @@ async def sudoers_list(_, message: Message):
         user = await app2.get_users(user_id)
         user = user.first_name if not user.mention else user.mention
         text += f"{count}. {user}\n"
-    await edit_or_reply(message, text=text)
+    await eor(message, text=text)
