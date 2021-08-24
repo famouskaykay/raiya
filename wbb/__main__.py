@@ -13,8 +13,6 @@ from wbb.modules.sudoers import bot_sys_stats
 from wbb.utils import paginate_modules
 from wbb.utils.dbfunctions import clean_restart_stage
 
-
-
 loop = asyncio.get_event_loop()
 
 HELPABLE = {}
@@ -75,8 +73,8 @@ async def start_bot():
                 "**Restarted Successfully**",
             )
 
-       else:
-            await app.send_message(LOG_GROUP_ID, "Bot started!")
+        else:
+            await app.send_message(LOG_GROUP_ID, "**Xkaykay**🛡 has started!")
     except Exception:
         pass
     await idle()
@@ -88,8 +86,9 @@ home_keyboard_pm = InlineKeyboardMarkup(
     [
         [
             InlineKeyboardButton(
-                text="Commands ❓", callback_data="bot_commands"
+                text="plugins ❓", callback_data="bot_commands"
             ),
+            
         ],
         [
             InlineKeyboardButton(
@@ -97,7 +96,7 @@ home_keyboard_pm = InlineKeyboardMarkup(
                 callback_data="stats_callback",
             ),
             InlineKeyboardButton(
-                text="Support 👨", url="http://t.me/KayAspirerProject"
+                text="Support Group🍑✌️", url="https://t.me/KayAspirerProject"
             ),
         ],
         [
@@ -115,7 +114,7 @@ home_text_pm = (
     + "add me to your group."
 )
 
-    
+
 @app.on_message(filters.command(["help", "start"]))
 async def help_command(_, message):
     if message.chat.type != "private":
@@ -126,6 +125,7 @@ async def help_command(_, message):
                         text="Help ❓",
                         url=f"t.me/{BOT_USERNAME}?start=help",
                     ),
+                    
                 ],
                 [
                     InlineKeyboardButton(
@@ -133,13 +133,13 @@ async def help_command(_, message):
                         callback_data="stats_callback",
                     ),
                     InlineKeyboardButton(
-                        text="Support group💜", url="t.me/KayAspirerProject"
+                        text="Support Group", url="https://t.me/KayAspirerProject"
                     ),
                 ],
             ]
         )
         return await message.reply_photo("https://telegra.ph/file/9d6d07a44db29b43d42b9.jpg",
-        caption="Hi there😍, I'm **kaykayX** group management robot,", reply_markup=keyboard
+        caption="Hi there😍, I'm **Xkaykay** group management bot,", reply_markup=keyboard
         )
     await message.reply(
         home_text_pm,
