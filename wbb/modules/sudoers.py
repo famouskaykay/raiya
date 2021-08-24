@@ -1,26 +1,3 @@
-"""
-MIT License
-
-Copyright (c) 2021 TheHamkerCat
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-"""
 import asyncio
 import os
 import subprocess
@@ -41,14 +18,14 @@ from wbb.utils.functions import (extract_user,
 
 __MODULE__ = "Sudoers"
 __HELP__ = """
-/stats - kuangalia Status ya system.
-/gstats - Kuangalia Takwimu za Kimataifa za Bot.
-/gban - Kupiga marufuku mtumiaji duniani.
-/clean_db - kuosha database.
-/broadcast - Kutangaza ujumbe kwa vikundi vyote.
-/update - Kusasisha na kuanzisha upya Bot
-.anonymize - Badilisha Jina/PFP kwa nasibu.
-.impersonate [User_ID|Username|Reply] - Clone profile ya user.
+/stats - To Check System Status.
+/gstats - To Check Bot's Global Stats.
+/gban - To Ban A User Globally.
+/clean_db - Clean database.
+/broadcast - To Broadcast A Message To All Groups.
+/update - To Update And Restart The Bot
+/eval - Execute Python Code
+/sh - Execute Shell Code
 """
 
 # Stats Module
@@ -61,7 +38,7 @@ async def bot_sys_stats():
     disk = psutil.disk_usage("/").percent
     process = psutil.Process(os.getpid())
     stats = f"""
-{USERBOT_USERNAME}@kaykayx
+{USERBOT_USERNAME}@William
 ------------------
 UPTIME: {formatter.get_readable_time((bot_uptime))}
 BOT: {round(process.memory_info()[0] / 1024 ** 2)} MB
@@ -111,8 +88,8 @@ async def ban_globally(_, message):
     try:
         await app.send_message(
             user.id,
-            f"sasa, Umepigwa marufuku kwote telegram na {from_user.mention},"
-            + " Unaweza kukata rufaa kwa marufuku hii kwa kuzungumza naye.",
+            f"Hello, You have been globally banned by {from_user.mention},"
+            + " You can appeal for this ban by talking to him.",
         )
     except Exception:
         pass
@@ -137,7 +114,7 @@ __**New Global Ban**__
         )
     except Exception:
         await message.reply_text(
-            "Mtumiaji Gbanned, Lakini Hatua hii ya Gban haikuingia, Niongeze Bot katika GBAN_LOG_GROUP"
+            "User Gbanned, But This Gban Action Wasn't Logged, Add Me Bot In GBAN_LOG_GROUP"
         )
 
 
@@ -149,16 +126,16 @@ __**New Global Ban**__
 async def unban_globally(_, message):
     user_id = await extract_user(message)
     if not user_id:
-        return await message.reply_text("Siwezi kupata mtumiaji huyo.")
+        return await message.reply_text("I can't find that user.")
     user = await app.get_users(user_id)
 
     is_gbanned = await is_gbanned_user(user.id)
     if not is_gbanned:
-        await message.reply_text("Sikumbuki nikimGban.")
+        await message.reply_text("I don't remember Gbanning him.")
     else:
         await remove_gban_user(user.id)
         await message.reply_text(
-            f"toa {user.mention}'s kwenye Global Ban.'"
+            f"Lifted {user.mention}'s Global Ban.'"
         )
 
 
@@ -208,6 +185,6 @@ async def update_restart(_, message):
     except Exception as e:
         return await message.reply_text(str(e))
     m = await message.reply_text(
-        "**Imesasishwa na tawi chaguo-msingi, kuwasha upya sasa.**"
+        "**Updated with default branch, restarting now.**"
     )
     await restart(m)
