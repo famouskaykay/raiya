@@ -74,7 +74,7 @@ async def start_bot():
             )
 
         else:
-            await app.send_message(LOG_GROUP_ID, "**Xkaykay**🛡 has started!")
+            await app.send_message(LOG_GROUP_ID, "Bot started!")
     except Exception:
         pass
     await idle()
@@ -86,9 +86,8 @@ home_keyboard_pm = InlineKeyboardMarkup(
     [
         [
             InlineKeyboardButton(
-                text="plugins ❓", callback_data="bot_commands"
+                text="Commands ❓", callback_data="bot_commands"
             ),
-            
         ],
         [
             InlineKeyboardButton(
@@ -96,7 +95,7 @@ home_keyboard_pm = InlineKeyboardMarkup(
                 callback_data="stats_callback",
             ),
             InlineKeyboardButton(
-                text="Support Group🍑✌️", url="https://t.me/KayAspirerProject"
+                text="Support 👨", url="https://t.me/KayAspirerProject"
             ),
         ],
         [
@@ -125,7 +124,6 @@ async def help_command(_, message):
                         text="Help ❓",
                         url=f"t.me/{BOT_USERNAME}?start=help",
                     ),
-                    
                 ],
                 [
                     InlineKeyboardButton(
@@ -133,13 +131,13 @@ async def help_command(_, message):
                         callback_data="stats_callback",
                     ),
                     InlineKeyboardButton(
-                        text="Support Group", url="https://t.me/KayAspirerProject"
+                        text="Support 👨", url="https://t.me/KayAspirerProject"
                     ),
                 ],
             ]
         )
-        return await message.reply_photo("https://telegra.ph/file/9d6d07a44db29b43d42b9.jpg",
-        caption="Hi there😍, I'm **Xkaykay** group management bot,", reply_markup=keyboard
+        return await message.reply(
+            "Pm Me For More Details.", reply_markup=keyboard
         )
     await message.reply(
         home_text_pm,
