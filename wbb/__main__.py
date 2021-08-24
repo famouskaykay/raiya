@@ -3,7 +3,7 @@ import importlib
 import re
 
 import uvloop
-from pyrogram import Client, filters, idle
+from pyrogram import filters, idle
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 from wbb import (BOT_NAME, BOT_USERNAME, LOG_GROUP_ID, USERBOT_NAME,
@@ -66,18 +66,19 @@ async def start_bot():
     print(f"[INFO]: BOT STARTED AS {BOT_NAME}!")
     print(f"[INFO]: USERBOT STARTED AS {USERBOT_NAME}!")
     restart_data = await clean_restart_stage()
-    if restart_data:
-        print("[INFO]: SENDING RESTART STATUS")
-        try:
+    try:
+        print("[INFO]: SENDING ONLINE STATUS")
+        if restart_data:
             await app.edit_message_text(
                 restart_data["chat_id"],
                 restart_data["message_id"],
                 "**Restarted Successfully**",
             )
-        except Exception:
-            pass
-    else:
-        await app.send_message(LOG_GROUP_ID, "xkaykay has **started!**🖤")
+
+       else:
+            await app.send_message(LOG_GROUP_ID, "Bot started!")
+    except Exception:
+        pass
     await idle()
     print("[INFO]: STOPPING BOT AND CLOSING AIOHTTP SESSION")
     await aiohttpsession.close()
@@ -152,7 +153,7 @@ async def help_parser(name, keyboard=None):
             paginate_modules(0, HELPABLE, "help")
         )
     return (
-        """Hello {first_name}! My name is {bot_name}!
+        """Hello {first_name}, My name is {bot_name}.
 I'm a group management bot with some useful features.
 You can choose an option below, by clicking a button.
 Also you can ask anything in Support Group.
@@ -195,7 +196,7 @@ async def help_button(client, query):
     back_match = re.match(r"help_back", query.data)
     create_match = re.match(r"help_create", query.data)
     top_text = f"""
-Hello {query.from_user.first_name}! My name is {BOT_NAME}!
+Hello {query.from_user.first_name}, My name is {BOT_NAME}.
 I'm a group management bot with some usefule features.
 You can choose an option below, by clicking a button.
 Also you can ask anything in Support Group.
