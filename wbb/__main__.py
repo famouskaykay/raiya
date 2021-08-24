@@ -74,7 +74,7 @@ async def start_bot():
             )
 
         else:
-            await app.send_message(LOG_GROUP_ID, "Bot started!")
+            await app.send_message(LOG_GROUP_ID, "Xkaykay has started🍆✌️!")
     except Exception:
         pass
     await idle()
@@ -136,8 +136,8 @@ async def help_command(_, message):
                 ],
             ]
         )
-        return await message.reply(
-            "Pm Me For More Details.", reply_markup=keyboard
+        return await message.reply_video("https://telegra.ph/file/ef43160faf5e756998419.mp4",
+        caption="Hi there😍, I'm **kaykayX** group management bot Pm Me For More Details,", reply_markup=keyboard
         )
     await message.reply(
         home_text_pm,
