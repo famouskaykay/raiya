@@ -24,4 +24,4 @@ feedparser
 pyromod
 fuzzysearch
 emoji
-regex
+google-trans-new==1.1.9
