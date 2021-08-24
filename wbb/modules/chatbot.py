@@ -1,3 +1,5 @@
+import emoji
+
 from asyncio import gather, sleep
 
 from pyrogram import filters
