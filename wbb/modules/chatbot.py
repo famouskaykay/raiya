@@ -127,6 +127,9 @@ async def aspirer(client, message):
     else:
         rm = msg
         # print (rm)
+        except:
+            return
+     
     
 
 @app.on_message(
