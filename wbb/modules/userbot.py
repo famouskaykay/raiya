@@ -14,6 +14,7 @@ from pyrogram.types import Message, ReplyKeyboardMarkup
 
 from wbb import app  # don't remove
 from wbb import SUDOERS, USERBOT_PREFIX, app2, arq
+from wbb.core.sections import section
 
 # Eval and Sh module from nana-remix
 
@@ -42,9 +43,12 @@ async def eor(msg: Message, **kwargs):
     )
 
 
-async def add_task(taskFunc, task_id, *args, **kwargs):
+async def add_task(taskFunc, task_id, task_name, *args, **kwargs):
     global tasks
-    task = create_task(taskFunc(*args, **kwargs))
+    task = create_task(
+        taskFunc(*args, **kwargs),
+        name=task_name,
+    )
     tasks[task_id] = task
     return task
 
@@ -70,7 +74,6 @@ async def rm_task(task_id=None):
     & filters.command("cancelTask", prefixes=USERBOT_PREFIX)
 )
 async def task_cancel(_, message: Message):
-    global tasks
     m = message
     r = m.reply_to_message
 
@@ -103,8 +106,12 @@ async def task_list(_, message: Message):
             text=f"{arrow(message)} No tasks pending",
         )
 
-    ls = "\n    ".join([str(i) for i in tasks.keys()])
-    await eor(message, text=f"{arrow(message)}  {ls}")
+    body = {
+        str(key): value.get_name()
+        for key, value in list(tasks.items())
+    }
+
+    await eor(message, text=section("Pending Tasks", body))
 
 
 @app2.on_message(
@@ -114,7 +121,7 @@ async def task_list(_, message: Message):
     & filters.command("eval", prefixes=USERBOT_PREFIX)
 )
 async def executor(client, message: Message):
-    global m, p, r, tasks
+    global m, p, r
     try:
         cmd = message.text.split(" ", maxsplit=1)[1]
     except IndexError:
@@ -141,6 +148,7 @@ async def executor(client, message: Message):
         task = await add_task(
             aexec,
             m.message_id,
+            "Eval",
             cmd,
             client,
             message,
