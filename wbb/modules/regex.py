@@ -35,14 +35,14 @@ async def sed(_, message):
 
         if not repl:
             return await message.reply_text(
-                "unajaribu kureplace... "
-                "hakuna na kitu?"
+                "You're trying to replace... "
+                "nothing with something?"
             )
 
         try:
 
             if infinite_checker(repl):
-                return await message.reply_text("umejaribu -_-")
+                return await message.reply_text("Nice try -_-")
 
             if "i" in flags and "g" in flags:
                 text = re.sub(
@@ -64,7 +64,7 @@ async def sed(_, message):
         # empty string errors -_-
         if len(text) >= 4096:
             await message.reply_text(
-                "majibu ya sed command ni marefu sana \
+                "The result of the sed command was too long for \
                                                  telegram!"
             )
         elif text:
