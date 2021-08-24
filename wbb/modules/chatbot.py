@@ -145,8 +145,27 @@ async def aspirer(client, message):
             test = test.text
         except:
             return
-          await type_and_send(message)
-        
+
+    # test = emoji.demojize(test.strip())
+
+    test = test.replace("kaykay", "Aco")
+    test = test.replace("Kaykay", "Aco")
+    response = await lunaQuery(test, message.from_user.id if message.from_user else 0)
+    response = response.replace("Aco", "Kaykay")
+    response = response.replace("aco", "Kaykay")
+
+    pro = response
+    if not "en" in lan and not lan == "":
+        try:
+            pro = translator.translate(pro, dest=lan)
+            pro = pro.text
+        except Exception:
+            return
+    try:
+        await daisyx.send_chat_action(message.chat.id, "typing")
+        await message.reply_text(pro)
+    except CFError:
+        return
      
     
 
