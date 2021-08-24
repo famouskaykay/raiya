@@ -24,3 +24,4 @@ feedparser
 pyromod
 fuzzysearch
 emoji
+regex
