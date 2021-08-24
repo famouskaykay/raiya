@@ -126,9 +126,21 @@ async def aspirer(client, message):
         rm = re.sub(r"\[([^]]+)]\(\s*([^)]+)\s*\)", r"", msg)
     else:
         rm = msg
+        
         # print (rm)
+    try:
+        lan = translator.detect(rm)
+        lan = lan.lang
+    except:
+        return
+    test = rm
+    if not "en" in lan and not lan == "":
+        try:
+            test = translator.translate(test, dest="en")
+            test = test.text
         except:
             return
+        
      
     
 
