@@ -91,7 +91,7 @@ async def type_and_send(message: Message):
     
     
 @app.on_message(
-    filters.regex("kaykay|Kaykay|KAYKAY")
+    filters.regex("kaykay|Kaykay|KAYKAY|Kay|kay")
     & ~filters.bot
     & ~filters.via_bot
     & ~filters.forwarded
