@@ -12,7 +12,7 @@ from wbb import (BOT_ID, SUDOERS, USERBOT_ID, USERBOT_PREFIX,
 from wbb.core.decorators.errors import capture_err
 from wbb.modules.userbot import eor
 from wbb.utils.filter_groups import chatbot_group
-from wbb.db.mongo_helpers.aichat import add_chat, get_session, remove_chat
+
 
 
 translator = google_translator()
