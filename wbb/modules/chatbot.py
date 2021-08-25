@@ -62,10 +62,6 @@ async def chatbot_status(_, message: Message):
 async def lunaQuery(query: str, user_id: int):
     luna = await arq.luna(query, user_id)
     return luna.result
-  
-def extract_emojis(s):
-    return "".join(c for c in s if c in emoji.UNICODE_EMOJI)
-  
 
 
 async def type_and_send(message: Message):
@@ -89,7 +85,9 @@ async def type_and_send(message: Message):
     await message.reply_text(responsess2)
     await message._client.send_chat_action(chat_id, "cancel")
     
-    
+def extract_emojis(s):
+    return "".join(c for c in s if c in emoji.UNICODE_EMOJI)
+      
 @app.on_message(
     filters.regex("kaykay|Kaykay|KAYKAY|Kay|kay")
     & ~filters.bot
