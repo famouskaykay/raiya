@@ -33,6 +33,7 @@ search_engine_parser
 asyncio
 googletrans==4.0.0-rc1
 pymongo
+nest-asyncio
 motor
 dnspython
 PyYAML>5.0
