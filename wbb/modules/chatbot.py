@@ -89,7 +89,7 @@ async def type_and_send(message: Message):
     
 
 @app.on_message(
-    filters.regex("kaykay|Kaykay|KAYKAY|Kay|kay")
+    filters.regex("Kaykay|kaykay|KAYKAY|kay|Kay")
     & ~filters.bot
     & ~filters.via_bot
     & ~filters.forwarded
@@ -98,7 +98,7 @@ async def type_and_send(message: Message):
     & ~filters.edited
 )
 @capture_err
-async def aspirer(client, message):
+async def kaykay(client, message):
     msg = message.text
     if msg.startswith("/") or msg.startswith("@"):
         message.continue_propagation()
@@ -129,7 +129,6 @@ async def aspirer(client, message):
         rm = re.sub(r"\[([^]]+)]\(\s*([^)]+)\s*\)", r"", msg)
     else:
         rm = msg
-        
         # print (rm)
     try:
         lan = translator.detect(rm)
@@ -143,6 +142,27 @@ async def aspirer(client, message):
             test = test.text
         except:
             return
+
+    # test = emoji.demojize(test.strip())
+
+    test = test.replace("kaykay", "Aco")
+    test = test.replace("kaykay", "Aco")
+    response = await lunaQuery(test, message.from_user.id if message.from_user else 0)
+    response = response.replace("Aco", "Kaykay")
+    response = response.replace("aco", "Kaykay")
+
+    pro = response
+    if not "en" in lan and not lan == "":
+        try:
+            pro = translator.translate(pro, dest=lan)
+            pro = pro.text
+        except Exception:
+            return
+    try:
+        await app.send_chat_action(message.chat.id, "typing")
+        await message.reply_text(pro)
+    except CFError:
+        return
 
     # test = emoji.demojize(test.strip())
 
@@ -161,6 +181,7 @@ async def aspirer(client, message):
 @app.on_message(
     filters.text & filters.private & ~filters.edited & filters.reply & ~filters.bot
 )
+@capture_err
 async def kaykay(client, message):
     msg = message.text
     if msg.startswith("/") or msg.startswith("@"):
@@ -222,7 +243,15 @@ async def kaykay(client, message):
         await message.reply_text(pro)
     except CFError:
         return
-                                
+
+@app.on_message(
+    filters.text
+    & filters.reply
+    & ~filters.bot
+    & ~filters.via_bot
+    & ~filters.forwarded,
+    group=chatbot_group,
+)
 @capture_err
 async def chatbot_talk(_, message: Message):
     if message.chat.id not in active_chats_bot:
