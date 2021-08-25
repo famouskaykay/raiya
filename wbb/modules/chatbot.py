@@ -44,7 +44,9 @@ async def chat_bot_toggle(db, message: Message):
             message, text="**Usage:**\n/chatbot [ENABLE|DISABLE]"
         )
 
-
+def extract_emojis(s):
+    return "".join(c for c in s if c in emoji.UNICODE_EMOJI)
+      
 # Enabled | Disable Chatbot
 
 
@@ -85,9 +87,7 @@ async def type_and_send(message: Message):
     await message.reply_text(responsess2)
     await message._client.send_chat_action(chat_id, "cancel")
     
-def extract_emojis(s):
-    return "".join(c for c in s if c in emoji.UNICODE_EMOJI)
-      
+
 @app.on_message(
     filters.regex("kaykay|Kaykay|KAYKAY|Kay|kay")
     & ~filters.bot
