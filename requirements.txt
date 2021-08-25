@@ -25,3 +25,10 @@ pyromod
 fuzzysearch
 emoji
 google-trans-new==1.1.9
+async-timeout
+regex
+spamwatch
+PyDictionary==2.0.1
+search_engine_parser
+asyncio
+googletrans==4.0.0-rc1
