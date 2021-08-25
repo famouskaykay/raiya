@@ -103,6 +103,7 @@ async def kaykay(client, message):
             test = test.text
         except:
             return
+          
 
     # test = emoji.demojize(test.strip())
 
@@ -209,40 +210,50 @@ async def kaykay(client, message):
 
 
 
-@app.on_message(filters.command("chatbot") & ~filters.edited)
-@capture_err
-async def chatbot_status(_, message: Message):
+@app.on_message(
+    filters.command("chatbot") & ~filters.edited & ~filters.bot & ~filters.private
+)
+@admins_only
+async def hmm(_, message):
+    global daisy_chats
     if len(message.command) != 2:
-        return await eor(
-            message, text="**Usage:**\n/chatbot [ENABLE|DISABLE]"
+        await message.reply_text(
+            "I only recognize `/chatbot on` and /chatbot `off only`"
         )
-    await chat_bot_toggle(active_chats_bot, message)
-
-
-async def lunaQuery(query: str, user_id: int):
-    luna = await arq.luna(query, user_id)
-    return luna.result
-
-async def type_and_send(message: Message):
+        message.continue_propagation()
+    status = message.text.split(None, 1)[1]
     chat_id = message.chat.id
-    user_id = message.from_user.id if message.from_user else 0
-    query = message.text.strip()
-    await message._client.send_chat_action(chat_id, "typing")
-    response, _ = await gather(lunaQuery(query, user_id), sleep(1))
-    if "Luna" in response:
-        responsee = response.replace("Luna", "xkaykay")
+    if status == "ON" or status == "on" or status == "On":
+        lel = await edit_or_reply(message, "`Processing...`")
+        lol = add_chat(int(message.chat.id))
+        if not lol:
+            await lel.edit("Xkaykay AI Already Activated In This Chat")
+            return
+        await lel.edit(
+            f"Xkaykay AI Successfully Added For Users In The Chat {message.chat.id}"
+        )
+
+    elif status == "OFF" or status == "off" or status == "Off":
+        lel = await edit_or_reply(message, "`Processing...`")
+        Escobar = remove_chat(int(message.chat.id))
+        if not Escobar:
+            await lel.edit("Xkaykay AI Was Not Activated In This Chat")
+            return
+        await lel.edit(
+            f"XKaykay AI Successfully Deactivated For Users In The Chat {message.chat.id}"
+        )
+
+    elif status == "EN" or status == "en" or status == "english":
+        if not chat_id in en_chats:
+            en_chats.append(chat_id)
+            await message.reply_text("English AI chat Enabled!")
+            return
+        await message.reply_text("AI Chat Is Already Disabled.")
+        message.continue_propagation()
     else:
-        responsee = response
-    if "Aco" in responsee:
-        responsess = responsee.replace("Aco", "xkaykay")
-    else:
-        responsess = responsee
-    if "Who is Tiana?" in responsess:
-        responsess2 = responsess.replace("Who is kaykay?", "telegram bot manager")
-    else:
-        responsess2 = responsess
-    await message.reply_text(response)
-    await message._client.send_chat_action(chat_id, "cancel")
+        await message.reply_text(
+            "I only recognize `/chatbot on` and /chatbot `off only`"
+        )
 
 
 @app.on_message(
@@ -264,6 +275,8 @@ async def chatbot_talk(_, message: Message):
     if message.reply_to_message.from_user.id != BOT_ID:
         return
     await type_and_send(message)
+    
+    
 
 """ FOR USERBOT """
 
