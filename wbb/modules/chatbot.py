@@ -241,7 +241,7 @@ async def kaykay(client, message):
         pro = translator.translate(pro, dest=lan)
         pro = pro.text
     try:
-        await daisyx.send_chat_action(message.chat.id, "typing")
+        await app.send_chat_action(message.chat.id, "typing")
         await message.reply_text(pro)
     except CFError:
         return
