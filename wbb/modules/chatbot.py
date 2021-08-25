@@ -213,9 +213,9 @@ async def kaykay(client, message):
 @app.on_message(
     filters.command("chatbot") & ~filters.edited & ~filters.bot & ~filters.private
 )
-@admins_only
+@capture_err
 async def hmm(_, message):
-    global daisy_chats
+    global active_chats_bot
     if len(message.command) != 2:
         await message.reply_text(
             "I only recognize `/chatbot on` and /chatbot `off only`"
