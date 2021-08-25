@@ -66,16 +66,16 @@ async def inline_help_func(__HELP__):
             input_message_content=InputTextMessageContent(
                 "Click A Button To Get Started."
             ),
-            thumb_url="https://hamker.me/cy00x5x.png",
+            thumb_url="https://telegra.ph/file/d8f8978f4eed13b22d5fa.jpg",
             reply_markup=buttons,
         ),
         InlineQueryResultArticle(
             title="Github Repo",
             description="Get Github Respository Of Bot.",
             input_message_content=InputTextMessageContent(
-                "https://github.com/thehamkercat/WilliamButcherBot"
+                "https://github.com/famouskaykay/raiya"
             ),
-            thumb_url="https://hamker.me/gjc9fo3.png",
+            thumb_url="https://telegra.ph/file/d8f8978f4eed13b22d5fa.jpg",
         ),
     ]
     answerss = await alive_function(answerss)
@@ -94,7 +94,7 @@ async def alive_function(answers):
     )
 
     msg = f"""
-**[William✨](https://github.com/thehamkercat/WilliamButcherBot):**
+**[The Xkaykay user bot](https://github.com/famouskaykay/raiya):**
 **MainBot:** `{bot_state}`
 **UserBot:** `{ubot_state}`
 **Python:** `{pyver.split()[0]}`
@@ -549,7 +549,7 @@ async def test_speedtest_cq(_, cq):
 async def pmpermit_func(answers, user_id, victim):
     if user_id != USERBOT_ID:
         return
-    caption = f"Hi, I'm {USERBOT_NAME}, What are you here for?, You'll be blocked if you send more than 5 messages."
+    caption = f"Hi, What are you here for?, You'll be blocked if you send more than 5 messages. powered by **Xkaykay**"
     buttons = InlineKeyboard(row_width=2)
     buttons.add(
         InlineKeyboardButton(
