@@ -150,8 +150,8 @@ async def help_parser(name, keyboard=None):
         keyboard = InlineKeyboardMarkup(
             paginate_modules(0, HELPABLE, "help")
         )
-    return (
-        """Hello {first_name}, My name is {bot_name}.
+    return await message.reply_video("https://telegra.ph/file/bb289fdc57af7f23d4ff0.mp4",
+    caption="""Hello {first_name}, My name is {bot_name}.
 I'm a group management bot with some useful features.
 You can choose an option below, by clicking a button.
 Also you can ask anything in Support Group.
