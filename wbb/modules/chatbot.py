@@ -111,13 +111,7 @@ async def kaykay(client, message):
     chat_id = message.chat.id
     if msg.startswith("/") or msg.startswith("@"):
         message.continue_propagation()
-    if chat_id in en_chats:
-        test = msg
-        test = test.replace("kaykay", "Aco")
-        test = test.replace("Kaykay", "Aco")
-        response = await lunaQuery(
-            test, message.from_user.id if message.from_user else 0
-        )
+    
         response = response.replace("Aco", "Kaykay")
         response = response.replace("aco", "Kaykay")
 
