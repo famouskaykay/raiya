@@ -47,44 +47,6 @@ async def chat_bot_toggle(db, message: Message):
 def extract_emojis(s):
     return "".join(c for c in s if c in emoji.UNICODE_EMOJI)
       
-# Enabled | Disable Chatbot
-
-
-
-@app.on_message(filters.command("chatbot") & ~filters.edited)
-@capture_err
-async def chatbot_status(_, message: Message):
-    if len(message.command) != 2:
-        return await eor(
-            message, text="**Usage:**\n/chatbot [ENABLE|DISABLE]"
-        )
-    await chat_bot_toggle(active_chats_bot, message)
-
-
-async def lunaQuery(query: str, user_id: int):
-    luna = await arq.luna(query, user_id)
-    return luna.result
-
-async def type_and_send(message: Message):
-    chat_id = message.chat.id
-    user_id = message.from_user.id if message.from_user else 0
-    query = message.text.strip()
-    await message._client.send_chat_action(chat_id, "typing")
-    response, _ = await gather(lunaQuery(query, user_id), sleep(1))
-    if "Luna" in response:
-        responsee = response.replace("Luna", "xkaykay")
-    else:
-        responsee = response
-    if "Aco" in responsee:
-        responsess = responsee.replace("Aco", "xkaykay")
-    else:
-        responsess = responsee
-    if "Who is Tiana?" in responsess:
-        responsess2 = responsess.replace("Who is kaykay?", "telegram bot manager")
-    else:
-        responsess2 = responsess
-    await message.reply_text(response)
-    await message._client.send_chat_action(chat_id, "cancel")
 
 
 @app.on_message(
@@ -242,6 +204,46 @@ async def kaykay(client, message):
         await message.reply_text(pro)
     except CFError:
         return
+   
+# Enabled | Disable Chatbot
+
+
+
+@app.on_message(filters.command("chatbot") & ~filters.edited)
+@capture_err
+async def chatbot_status(_, message: Message):
+    if len(message.command) != 2:
+        return await eor(
+            message, text="**Usage:**\n/chatbot [ENABLE|DISABLE]"
+        )
+    await chat_bot_toggle(active_chats_bot, message)
+
+
+async def lunaQuery(query: str, user_id: int):
+    luna = await arq.luna(query, user_id)
+    return luna.result
+
+async def type_and_send(message: Message):
+    chat_id = message.chat.id
+    user_id = message.from_user.id if message.from_user else 0
+    query = message.text.strip()
+    await message._client.send_chat_action(chat_id, "typing")
+    response, _ = await gather(lunaQuery(query, user_id), sleep(1))
+    if "Luna" in response:
+        responsee = response.replace("Luna", "xkaykay")
+    else:
+        responsee = response
+    if "Aco" in responsee:
+        responsess = responsee.replace("Aco", "xkaykay")
+    else:
+        responsess = responsee
+    if "Who is Tiana?" in responsess:
+        responsess2 = responsess.replace("Who is kaykay?", "telegram bot manager")
+    else:
+        responsess2 = responsess
+    await message.reply_text(response)
+    await message._client.send_chat_action(chat_id, "cancel")
+
 
 @app.on_message(
     filters.text
