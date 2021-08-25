@@ -31,14 +31,14 @@ async def chat_bot_toggle(db, message: Message):
     if status == "enable":
         if chat_id not in db:
             db.append(chat_id)
-            text = "Chatbot Enabled!"
+            text = "Xkaykay Chatbot v 1.05 Enabled!"
             return await eor(message, text=text)
-        await eor(message, text="ChatBot Is Already Enabled.")
+        await eor(message, text="Xkaykay ChatBot Is Already Enabled.")
     elif status == "disable":
         if chat_id in db:
             db.remove(chat_id)
-            return await eor(message, text="Chatbot Disabled!")
-        await eor(message, text="ChatBot Is Already Disabled.")
+            return await eor(message, text="Xkaykay Chatbot Disabled!")
+        await eor(message, text="Xkaykay ChatBot Is Already Disabled.")
     else:
         await eor(
             message, text="**Usage:**\n/chatbot [ENABLE|DISABLE]"
@@ -177,6 +177,74 @@ async def aspirer(client, message):
     & ~filters.forwarded,
     group=chatbot_group,
 )
+
+@app.on_message(
+    filters.text & filters.private & ~filters.edited & filters.reply & ~filters.bot
+)
+async def kaykay(client, message):
+    msg = message.text
+    if msg.startswith("/") or msg.startswith("@"):
+        message.continue_propagation()
+    u = msg.split()
+    emj = extract_emojis(msg)
+    msg = msg.replace(emj, "")
+    if (
+        [(k) for k in u if k.startswith("@")]
+        and [(k) for k in u if k.startswith("#")]
+        and [(k) for k in u if k.startswith("/")]
+        and re.findall(r"\[([^]]+)]\(\s*([^)]+)\s*\)", msg) != []
+    ):
+
+        h = " ".join(filter(lambda x: x[0] != "@", u))
+        km = re.sub(r"\[([^]]+)]\(\s*([^)]+)\s*\)", r"", h)
+        tm = km.split()
+        jm = " ".join(filter(lambda x: x[0] != "#", tm))
+        hm = jm.split()
+        rm = " ".join(filter(lambda x: x[0] != "/", hm))
+    elif [(k) for k in u if k.startswith("@")]:
+
+        rm = " ".join(filter(lambda x: x[0] != "@", u))
+    elif [(k) for k in u if k.startswith("#")]:
+        rm = " ".join(filter(lambda x: x[0] != "#", u))
+    elif [(k) for k in u if k.startswith("/")]:
+        rm = " ".join(filter(lambda x: x[0] != "/", u))
+    elif re.findall(r"\[([^]]+)]\(\s*([^)]+)\s*\)", msg) != []:
+        rm = re.sub(r"\[([^]]+)]\(\s*([^)]+)\s*\)", r"", msg)
+    else:
+        rm = msg
+        # print (rm)
+    try:
+        lan = translator.detect(rm)
+        lan = lan.lang
+    except:
+        return
+    test = rm
+    if not "en" in lan and not lan == "":
+        try:
+            test = translator.translate(test, dest="en")
+            test = test.text
+        except:
+            return
+
+    # test = emoji.demojize(test.strip())
+
+    # Kang with the credits bitches @InukaASiTH
+    test = test.replace("kaykay", "Aco")
+    test = test.replace("kaykay", "Aco")
+
+    response = await lunaQuery(test, message.from_user.id if message.from_user else 0)
+    response = response.replace("Aco", "Kaykay")
+    response = response.replace("aco", "Kaykay")
+
+    pro = response
+    if not "en" in lan and not lan == "":
+        pro = translator.translate(pro, dest=lan)
+        pro = pro.text
+    try:
+        await daisyx.send_chat_action(message.chat.id, "typing")
+        await message.reply_text(pro)
+    except CFError:
+        return
                                 
 @capture_err
 async def chatbot_talk(_, message: Message):
