@@ -99,8 +99,6 @@ async def type_and_send(message: Message):
     group=2,
 )
 async def kaykay(client, message):
-    if not get_session(int(message.chat.id)):
-        return
     if not message.reply_to_message:
         return
     try:
