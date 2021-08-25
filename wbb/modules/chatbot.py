@@ -55,7 +55,7 @@ def extract_emojis(s):
 @capture_err
 async def chatbot_status(_, message: Message):
     if len(message.command) != 2:
-        return await edit_or_reply(
+        return await eor(
             message, text="**Usage:**\n/chatbot [ENABLE|DISABLE]"
         )
     await chat_bot_toggle(active_chats_bot, message)
@@ -64,7 +64,6 @@ async def chatbot_status(_, message: Message):
 async def lunaQuery(query: str, user_id: int):
     luna = await arq.luna(query, user_id)
     return luna.result
-
 
 async def type_and_send(message: Message):
     chat_id = message.chat.id
@@ -84,9 +83,9 @@ async def type_and_send(message: Message):
         responsess2 = responsess.replace("Who is kaykay?", "telegram bot manager")
     else:
         responsess2 = responsess
-    await message.reply_text(responsess2)
+    await message.reply_text(response)
     await message._client.send_chat_action(chat_id, "cancel")
-    
+
 
 @app.on_message(
     filters.regex("Kaykay|kaykay|KAYKAY|kay|Kay")
