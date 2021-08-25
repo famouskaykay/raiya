@@ -12,6 +12,7 @@ from wbb import (BOT_ID, SUDOERS, USERBOT_ID, USERBOT_PREFIX,
 from wbb.core.decorators.errors import capture_err
 from wbb.modules.userbot import eor
 from wbb.utils.filter_groups import chatbot_group
+from wbb.db.mongo_helpers.aichat import add_chat, get_session, remove_chat
 
 
 translator = google_translator()
@@ -88,7 +89,113 @@ async def type_and_send(message: Message):
     await message.reply_text(responsess2)
     await message._client.send_chat_action(chat_id, "cancel")
 
+@app.on_message(
+    filters.text
+    & filters.reply
+    & ~filters.bot
+    & ~filters.edited
+    & ~filters.via_bot
+    & ~filters.forwarded,
+    group=2,
+)
+async def kaykay(client, message):
+    if not get_session(int(message.chat.id)):
+        return
+    if not message.reply_to_message:
+        return
+    try:
+        senderr = message.reply_to_message.from_user.id
+    except:
+        return
+    if senderr != BOT_ID:
+        return
+    msg = message.text
+    chat_id = message.chat.id
+    if msg.startswith("/") or msg.startswith("@"):
+        message.continue_propagation()
+    if chat_id in en_chats:
+        test = msg
+        test = test.replace("kaykay", "Aco")
+        test = test.replace("Kaykay", "Aco")
+        response = await lunaQuery(
+            test, message.from_user.id if message.from_user else 0
+        )
+        response = response.replace("Aco", "Kaykay")
+        response = response.replace("aco", "Kaykay")
+
+        pro = response
+        try:
+            await app.send_chat_action(message.chat.id, "typing")
+            await message.reply_text(pro)
+        except CFError:
+            return
+
+    else:
+        u = msg.split()
+        emj = extract_emojis(msg)
+        msg = msg.replace(emj, "")
+        if (
+            [(k) for k in u if k.startswith("@")]
+            and [(k) for k in u if k.startswith("#")]
+            and [(k) for k in u if k.startswith("/")]
+            and re.findall(r"\[([^]]+)]\(\s*([^)]+)\s*\)", msg) != []
+        ):
+
+            h = " ".join(filter(lambda x: x[0] != "@", u))
+            km = re.sub(r"\[([^]]+)]\(\s*([^)]+)\s*\)", r"", h)
+            tm = km.split()
+            jm = " ".join(filter(lambda x: x[0] != "#", tm))
+            hm = jm.split()
+            rm = " ".join(filter(lambda x: x[0] != "/", hm))
+        elif [(k) for k in u if k.startswith("@")]:
+
+            rm = " ".join(filter(lambda x: x[0] != "@", u))
+        elif [(k) for k in u if k.startswith("#")]:
+            rm = " ".join(filter(lambda x: x[0] != "#", u))
+        elif [(k) for k in u if k.startswith("/")]:
+            rm = " ".join(filter(lambda x: x[0] != "/", u))
+        elif re.findall(r"\[([^]]+)]\(\s*([^)]+)\s*\)", msg) != []:
+            rm = re.sub(r"\[([^]]+)]\(\s*([^)]+)\s*\)", r"", msg)
+        else:
+            rm = msg
+            # print (rm)
+        try:
+            lan = translator.detect(rm)
+            lan = lan.lang
+        except:
+            return
+        test = rm
+        if not "en" in lan and not lan == "":
+            try:
+                test = translator.translate(test, dest="en")
+                test = test.text
+            except:
+                return
+        # test = emoji.demojize(test.strip())
+
+        test = test.replace("daisy", "Aco")
+        test = test.replace("Daisy", "Aco")
+        response = await lunaQuery(
+            test, message.from_user.id if message.from_user else 0
+        )
+        response = response.replace("Aco", "kaykayy")
+        response = response.replace("aco", "Kaykay")
+        response = response.replace("Luna", "Kaykay")
+        response = response.replace("luna", "Kaykay")
+        pro = response
+        if not "en" in lan and not lan == "":
+            try:
+                pro = translator.translate(pro, dest=lan)
+                pro = pro.text
+            except:
+                return
+        try:
+            await app.send_chat_action(message.chat.id, "typing")
+            await message.reply_text(pro)
+        except CFError:
+            return
     
+
 @app.on_message(
     filters.text & filters.private & ~filters.edited & filters.reply & ~filters.bot
 )
