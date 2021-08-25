@@ -1,4 +1,4 @@
-FROM famouskaykay/raiya:latest
+FROM williambutcherbot/python:latest
 
 WORKDIR /wbb
 RUN chmod 777 /wbb
