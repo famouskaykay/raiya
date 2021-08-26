@@ -23,6 +23,7 @@ import asyncio
 import logging
 import time
 from os import path
+from aiogram import Bot, Dispatcher, types
 
 from aiohttp import ClientSession
 from motor.motor_asyncio import AsyncIOMotorClient as MongoClient
