@@ -25,11 +25,11 @@ class InterceptHandler(logging.Handler):
 logging.basicConfig(handlers=[InterceptHandler()], level=logging.INFO)
 log = logging.getLogger(__name__)
 logger.add(
-    "logs/kaykay.log",
+    "logs/daisy.log",
     rotation="1 d",
     compression="tar.xz",
     backtrace=True,
     diagnose=True,
     level="INFO",
 )
-log.info("Enabled logging intro kaykay.log file.")
+log.info("Enabled logging intro daisy.log file.")
