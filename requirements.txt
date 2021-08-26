@@ -33,6 +33,7 @@ search_engine_parser
 asyncio
 googletrans==4.0.0-rc1
 pymongo
+aiogram == 2.13
 html5lib
 nest-asyncio
 motor
@@ -42,3 +43,4 @@ loguru
 envparse
 sqlalchemy==1.3.20 
 odmantic 
+html2text
