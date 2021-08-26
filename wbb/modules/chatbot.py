@@ -73,7 +73,7 @@ async def type_and_send(message: Message):
     user_id = message.from_user.id if message.from_user else 0
     query = message.text.strip()
     await message._client.send_chat_action(chat_id, "typing")
-    response, _ = await gather(lunaQuery(query, user_id), sleep(3))
+    response, _ = await gather(lunaQuery(query, user_id), sleep(1))
     if "Luna" in response:
         responsee = response.replace("Luna", "kaykay")
     else:
@@ -234,12 +234,12 @@ async def aspirer(client, message):
         try:
             test = translator.translate(test, dest="en")
             test = test.text
+            test = emoji.demojize(test.strip())
         except:
             return
 
     # test = emoji.demojize(test.strip())
 
-    # Kang with the credits bitches @InukaASiTH
     test = test.replace("kaykay", "Aco")
     test = test.replace("Kaykay", "Aco")
 
