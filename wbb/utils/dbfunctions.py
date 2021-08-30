@@ -31,6 +31,7 @@ blacklist_chatdb = db.blacklistChat
 restart_stagedb = db.restart_stage
 flood_toggle_db = db.flood_toggle
 rssdb = db.rss
+prank = db.prank
 
 
 def obj_to_str(object):
@@ -43,6 +44,27 @@ def obj_to_str(object):
 def str_to_obj(string: str):
     object = pickle.loads(codecs.decode(string.encode(), "base64"))
     return object
+
+
+""" prank functions """
+async def prank_count() -> dict:
+    chats = prankdb.find({"chat_id": {"$lt": 0}})
+    if not chats:
+        return {}
+    return {}
+    chats_count = 0
+    
+
+async def prank(ult):
+    msg = await eor(ult, "**PROMOTING USER..**")
+    await asyncio.sleep(1)
+    await msg.edit("**PROMOTING USER...**")
+    await asyncio.sleep(1)
+    await msg.edit("**GIVING RIGHTS**")
+    await asyncio.sleep(1)
+    await msg.edit("**PROMOTED USER SUCCESSFULLY**")
+
+
 
 
 """ Notes functions """
