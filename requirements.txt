@@ -27,6 +27,7 @@ emoji
 google-trans-new==1.1.9
 async-timeout
 regex
+fonttools
 spamwatch
 PyDictionary==2.0.1
 search_engine_parser
