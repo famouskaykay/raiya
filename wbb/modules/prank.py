@@ -5,8 +5,9 @@
 """
 
 import asyncio
+from wbb import app
 
-from . import *
+
 
 
 @app(pattern="pprank")
