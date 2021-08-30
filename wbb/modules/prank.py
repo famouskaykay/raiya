@@ -6,9 +6,10 @@ import asyncio
 from wbb import app
 from wbb.core.decorators.errors import capture_err
 from wbb.utils.dbfunctions import prank, prank_count
+from wbb.utils.functions import make_carbon
 
 __MODULE__ = "prank"
-__HELP__ = "/prank - To Choose Couple Of The Day"
+__HELP__ = "/prank - to prank"
 
 @app.on_message(filters.command("prank"))
 @capture_err
@@ -24,6 +25,12 @@ async def prank_func(_, message):
     m = await message.reply_text("pranking......")
     prank = await make_carbon(message.reply_to_message.text)
     await m.edit("preparing prank......")
+    await m.delete()
+    await m.edit("......")
+    await m.delete()
+    await m.edit("installing dildos.")
+    await m.delete()
+    await m.edit("logging porn hub.")
     await m.delete()
     prank.close()
 
