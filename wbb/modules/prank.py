@@ -28,13 +28,3 @@ async def prank_func(_, message):
     prank.close()
 
 
-@app(pattern="prank")
-@capture_err
-async def pprank(ult):
-    msg = await eor(ult, "**PROMOTING USER..**")
-    await asyncio.sleep(1)
-    await msg.edit("**PROMOTING USER...**")
-    await asyncio.sleep(1)
-    await msg.edit("**GIVING RIGHTS**")
-    await asyncio.sleep(1)
-    await msg.edit("**PROMOTED USER SUCCESSFULLY**")
