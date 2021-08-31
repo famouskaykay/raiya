@@ -2,6 +2,7 @@ import logging
 import time
 
 from pyrogram import Client, filters
+from wbb.sql import forceSubscribe_sql as sql
 from wbb.core.decorators.errors import capture_err
 from pyrogram.errors import RPCError
 from pyrogram.errors.exceptions.bad_request_400 import (
@@ -42,36 +43,36 @@ def _onUnMuteRequest(client, cb):
         if chat_member.restricted_by:
             if chat_member.restricted_by.id == BOT_ID:
                 try:
-                    client.get_chat_member(channel, user_id)
-                    client.unban_chat_member(chat_id, user_id)
+                    app.get_chat_member(channel, user_id)
+                    app.unban_chat_member(chat_id, user_id)
                     cb.message.delete()
                     # if cb.message.reply_to_message.from_user.id == user_id:
                     # cb.message.delete()
                 except UserNotParticipant:
-                    client.answer_callback_query(
+                    app.answer_callback_query(
                         cb.id,
                         text=f"❗ Join our @{channel} channel and press 'UnMute Me' button.",
                         show_alert=True,
                     )
                 except ChannelPrivate:
-                    client.unban_chat_member(chat_id, user_id)
+                    app.unban_chat_member(chat_id, user_id)
                     cb.message.delete()
 
             else:
-                client.answer_callback_query(
+                app.answer_callback_query(
                     cb.id,
                     text="❗ You have been muted by admins due to some other reason.",
                     show_alert=True,
                 )
         else:
-            if not client.get_chat_member(chat_id, BOT_ID).status == "administrator":
-                client.send_message(
+            if not app.get_chat_member(chat_id, BOT_ID).status == "administrator":
+                app.send_message(
                     chat_id,
                     f"❗ **{cb.from_user.mention} is trying to UnMute himself but i can't unmute him because i am not an admin in this chat add me as admin again.**\n__#Leaving this chat...__",
                 )
 
             else:
-                client.answer_callback_query(
+                app.answer_callback_query(
                     cb.id,
                     text="❗ Warning! Don't press the button when you cn talk.",
                     show_alert=True,
@@ -79,7 +80,7 @@ def _onUnMuteRequest(client, cb):
 
 
 @app.on_message(filters.text & ~filters.private & ~filters.edited, group=1)
-def _check_member(client, message):
+def _check_member(app, message):
     chat_id = message.chat.id
     chat_db = sql.fs_settings(chat_id)
     if chat_db:
@@ -141,10 +142,10 @@ def _check_member(client, message):
 
 
 @app.on_message(filters.command(["forcesubscribe", "forcesub"]) & ~filters.private)
-def config(client, message):
+def config(app, message):
+    chat_id = message.chat.id
     user = app.get_chat_member(message.chat.id, message.from_user.id)
-    if user.status == "creator" or user.user.id == 1141839926:
-        chat_id = message.chat.id
+    if user.status == "creator" or user.user.id == 1141839926:        
         if len(message.command) > 1:
             input_str = message.command[1]
             input_str = input_str.replace("@", "")
