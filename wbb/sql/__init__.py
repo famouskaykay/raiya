@@ -13,7 +13,6 @@ def start() -> scoped_session:
 
 try:
     BASE = declarative_base()
-    SESSION = start()
 except AttributeError as e:
     # yeah
     print("DATABASE_URL is not configured. Features depending on the database might have issues.")
