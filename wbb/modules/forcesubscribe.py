@@ -2,7 +2,6 @@ import logging
 import time
 
 from pyrogram import Client, filters
-from wbb.sql import forceSubscribe_sql as sql
 from wbb.core.decorators.errors import capture_err
 from pyrogram.errors import RPCError
 from pyrogram.errors.exceptions.bad_request_400 import (
