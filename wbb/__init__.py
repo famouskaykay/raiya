@@ -69,7 +69,7 @@ bot_start_time = time.time()
 print("[INFO]: INITIALIZING DATABASE")
 mongo_client = MongoClient(MONGO_DB_URI)
 db = mongo_client.wbb
-
+POSTGRESS_URL = MONGO_DB_URI
 
 async def load_sudoers():
     global SUDOERS
