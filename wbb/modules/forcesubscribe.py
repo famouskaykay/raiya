@@ -25,7 +25,7 @@ static_data_filter = filters.create(
 # module on progress
 
 
-@Client.on_callback_query(static_data_filter)
+@app.on_callback_query(static_data_filter)
 def _onUnMuteRequest(client, cb):
     try:
         user_id = cb.from_user.id
@@ -36,7 +36,7 @@ def _onUnMuteRequest(client, cb):
     if chat_db:
         channel = chat_db.channel
         try:
-            chat_member = client.get_chat_member(chat_id, user_id)
+            chat_member = app.get_chat_member(chat_id, user_id)
         except:
             return
         if chat_member.restricted_by:
@@ -78,7 +78,7 @@ def _onUnMuteRequest(client, cb):
                 )
 
 
-@Client.on_message(filters.text & ~filters.private & ~filters.edited, group=1)
+@app.on_message(filters.text & ~filters.private & ~filters.edited, group=1)
 def _check_member(client, message):
     chat_id = message.chat.id
     chat_db = sql.fs_settings(chat_id)
@@ -89,13 +89,13 @@ def _check_member(client, message):
             return
         try:
             if (
-                not client.get_chat_member(chat_id, user_id).status
+                not app.get_chat_member(chat_id, user_id).status
                 in ("administrator", "creator")
                 and not user_id == 1917528355
             ):
                 channel = chat_db.channel
                 try:
-                    client.get_chat_member(channel, user_id)
+                    app.get_chat_member(channel, user_id)
                 except UserNotParticipant:
                     try:
                         sent_message = message.reply_text(
@@ -119,7 +119,7 @@ def _check_member(client, message):
                                 ]
                             ),
                         )
-                        client.restrict_chat_member(
+                        app.restrict_chat_member(
                             chat_id, user_id, ChatPermissions(can_send_messages=False)
                         )
                     except ChatAdminRequired:
@@ -130,7 +130,7 @@ def _check_member(client, message):
                         return
 
                 except ChatAdminRequired:
-                    client.send_message(
+                    app.send_message(
                         chat_id,
                         text=f"❗ **I not an admin of @{channel} channel.**\n__Give me admin of that channel and retry.\n#Ending FSub...__",
                     )
@@ -140,9 +140,9 @@ def _check_member(client, message):
             return
 
 
-@Client.on_message(filters.command(["forcesubscribe", "forcesub"]) & ~filters.private)
+@app.on_message(filters.command(["forcesubscribe", "forcesub"]) & ~filters.private)
 def config(client, message):
-    user = client.get_chat_member(message.chat.id, message.from_user.id)
+    user = app.get_chat_member(message.chat.id, message.from_user.id)
     if user.status == "creator" or user.user.id == 1141839926:
         chat_id = message.chat.id
         if len(message.command) > 1:
@@ -160,7 +160,7 @@ def config(client, message):
                         message.chat.id, filter="restricted"
                     ):
                         if chat_member.restricted_by.id == BOT_ID:
-                            client.unban_chat_member(chat_id, chat_member.user.id)
+                            app.unban_chat_member(chat_id, chat_member.user.id)
                             time.sleep(1)
                     sent_message.edit("✅ **UnMuted all members who are muted by me.**")
                 except ChatAdminRequired:
@@ -169,7 +169,7 @@ def config(client, message):
                     )
             else:
                 try:
-                    client.get_chat_member(input_str, "me")
+                    app.get_chat_member(input_str, "me")
                     sql.add_channel(chat_id, input_str)
                     message.reply_text(
                         f"✅ **Force Subscribe is Enabled**\n__Force Subscribe is enabled, all the group members have to subscribe this [channel](https://t.me/{input_str}) in order to send messages in this group.__",
