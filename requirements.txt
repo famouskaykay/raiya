@@ -10,7 +10,7 @@ motor
 pillow
 psutil
 pykeyboard
-
+psycopg2
 Pyrogram==1.2.9
 python-arq
 requests
