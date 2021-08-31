@@ -26,12 +26,7 @@ async def prank_func(_, message):
     prank = await make_carbon(message.reply_to_message.text)
     await m.edit("preparing prank......")
     await m.delete()
-    await m.edit("......")
-    await m.delete()
-    await m.edit("installing dildos.")
-    await m.delete()
-    await m.edit("logging porn hub.")
-    await m.delete()
     prank.close()
+#ill fix this when i have free time
 
 
