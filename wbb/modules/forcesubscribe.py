@@ -4,7 +4,7 @@ import time
 from pyrogram import filters
 from wbb.core.decorators.errors import capture_err
 from pyrogram.errors import RPCError
-rom pyrogram.errors.exceptions.bad_request_400 import (
+from pyrogram.errors.exceptions.bad_request_400 import (
     ChannelPrivate,
     ChatAdminRequired,
     PeerIdInvalid,
@@ -15,7 +15,6 @@ rom pyrogram.errors.exceptions.bad_request_400 import (
 from pyrogram.types import ChatPermissions, InlineKeyboardButton, InlineKeyboardMarkup
 from wbb import app
 from wbb import BOT_ID
-from wbb.utils.filter_groups import
 
 __MODULE__ = "forcesubscribe"
 __HELP__ = """
