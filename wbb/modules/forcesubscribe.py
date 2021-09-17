@@ -5,7 +5,9 @@ from pyrogram import Client
 from wbb.core.decorators.errors import capture_err
 from pyrogram.errors import RPCError
 from pyrogram.errors.exceptions.bad_request_400 import UserNotParticipant, UsernameNotOccupied, ChatAdminRequired, PeerIdInvalid
-from pyrogram import filters, ChatPermissions, InlineKeyboardMarkup, InlineKeyboardButton
+from pyrogram import filters
+from wbb.utils.filter_groups import chatbot_group
+
 from pyrogram.types import (Chat, ChatPermissions,
                             InlineKeyboardButton,
                             InlineKeyboardMarkup, Message, User)
@@ -38,9 +40,8 @@ def onButtonPress(client, cb):
 
     
 @app.on_message(filters.command(["forcesubscribe", "fsub"]) & ~Filters.private)
-def config(client, message):
-  user = client.get_chat_member(message.chat.id, message.from_user.id)
-  if user.status is "creator" or user.user.id in SUDOERS:
+def kay(client, message):
+  if User.status is "creator" or User.user.id in SUDOERS:
     chat_id = message.chat.id
     if len(message.command) > 1:
       input_str = message.command[1]
