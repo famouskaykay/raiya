@@ -13,7 +13,7 @@ from pyrogram.types import (Chat, ChatPermissions,
                             InlineKeyboardMarkup, Message, User)
 from wbb import SUDOERS
 
-from sql import forceSubscribe_sql as sql
+from wbb.sql import forceSubscribe_sql as sql
 from wbb import app
 from wbb import BOT_ID
 from wbb import db
