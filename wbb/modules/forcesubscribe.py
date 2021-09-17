@@ -5,7 +5,7 @@ from pyrogram import Client
 from wbb.core.decorators.errors import capture_err
 from pyrogram.errors import RPCError
 from pyrogram.errors.exceptions.bad_request_400 import UserNotParticipant, UsernameNotOccupied, ChatAdminRequired, PeerIdInvalid
-from pyrogram import Filters, ChatPermissions, InlineKeyboardMarkup, InlineKeyboardButton
+from pyrogram import filters, ChatPermissions, InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.types import (Chat, ChatPermissions,
                             InlineKeyboardButton,
                             InlineKeyboardMarkup, Message, User)
