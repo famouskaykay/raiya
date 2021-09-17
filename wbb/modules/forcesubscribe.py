@@ -18,7 +18,7 @@ from wbb import db
 import time
 
 
-@app.on_callback_query(Filters.regex("^onButtonPress$"))
+@app.on_callback_query(filters.regex("^onButtonPress$"))
 def onButtonPress(client, cb):
   user_id = member.id
   chat_id = message.chat.id
@@ -37,7 +37,7 @@ def onButtonPress(client, cb):
     
 
     
-@app.on_message(Filters.command(["forcesubscribe", "fsub"]) & ~Filters.private)
+@app.on_message(filters.command(["forcesubscribe", "fsub"]) & ~Filters.private)
 def config(client, message):
   user = client.get_chat_member(message.chat.id, message.from_user.id)
   if user.status is "creator" or user.user.id in SUDOERS:
