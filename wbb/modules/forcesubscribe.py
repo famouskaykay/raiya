@@ -1,29 +1,81 @@
 import logging
 import time
 
-from pyrogram import Client, filters
+from pyrogram import Client
 from wbb.core.decorators.errors import capture_err
 from pyrogram.errors import RPCError
-from pyrogram.errors.exceptions.bad_request_400 import (
-    ChannelPrivate,
-    ChatAdminRequired,
-    PeerIdInvalid,
-    UsernameNotOccupied,
-    UserNotParticipant,
-)
+from pyrogram.errors.exceptions.bad_request_400 import UserNotParticipant, UsernameNotOccupied, ChatAdminRequired, PeerIdInvalid
+from pyrogram import Filters, ChatPermissions, InlineKeyboardMarkup, InlineKeyboardButton
+from pyrogram.types import (Chat, ChatPermissions,
+                            InlineKeyboardButton,
+                            InlineKeyboardMarkup, Message, User)
+from wbb import SUDOERS
 
-from pyrogram.types import ChatPermissions, InlineKeyboardButton, InlineKeyboardMarkup
+from sql import forceSubscribe_sql as sql
 from wbb import app
 from wbb import BOT_ID
+from wbb import db
+import time
 
 
-logging.basicConfig(level=logging.INFO)
+@app.on_callback_query(Filters.regex("^onButtonPress$"))
+def onButtonPress(client, cb):
+  user_id = member.id
+  chat_id = message.chat.id
+  cws = sql.fs_settings(chat_id)
+  if cws:
+    channel = cws.channel
+    if client.get_chat_member(chat_id, user_id).restricted_by.id == (client.get_me()).id:
+      try:
+        client.get_chat_member(channel, user_id)
+        client.unban_chat_member(chat_id, user_id)
+      except UserNotParticipant:
+        client.answer_callback_query(cb.id, text="ℹ Join The Channel And Press The Button Again.")
+    else:
+      client.answer_callback_query(cb.id, text="ℹ You Are Muted By Admins For Other Reasons.", show_alert=True)
 
-static_data_filter = filters.create(
-    lambda _, __, query: query.data == "onUnMuteRequest"
-)
-# module on progress
+    
 
+    
+@app.on_message(Filters.command(["forcesubscribe", "fsub"]) & ~Filters.private)
+def config(client, message):
+  user = client.get_chat_member(message.chat.id, message.from_user.id)
+  if user.status is "creator" or user.user.id in SUDOERS:
+    chat_id = message.chat.id
+    if len(message.command) > 1:
+      input_str = message.command[1]
+      input_str = input_str.replace("@", "")
+      if input_str.lower() in ("off", "no", "disable"):
+        sql.disapprove(chat_id)
+        message.reply_text("❌ **Force Subscribe is Disabled Successfully.**")
+      elif input_str.lower() in ('clear'):
+        sent_message = message.reply_text('**🔔 Unmuting All Members Who is Muted By Me...**')
+        try:
+          for chat_member in client.get_chat_members(message.chat.id, filter="restricted"):
+            if chat_member.restricted_by.id == (client.get_me()).id:
+                client.unban_chat_member(chat_id, chat_member.user.id)
+                time.sleep(1)
+          sent_message.edit('✅ **UnMuted All Members Which Are Muted By Me.**')
+        except ChatAdminRequired:
+          sent_message.edit('❗ **I Am Not An Admin In This Chat.**\nI Can not Unmute Members Because I Am Not An Admin in This Chat, Make Me.')
+      else:
+        try:
+          client.get_chat_member(input_str, "me")
+          sql.add_channel(chat_id, input_str)
+          message.reply_text(f"✅ **Force Subscribe is Enabled**\nForce Subscribe is Enabled, All The Group Members Have To Subscribe This [channel](https://t.me/{input_str}) in Order To Send Messages In This Group.", disable_web_page_preview=True)
+        except UserNotParticipant:
+          message.reply_text(f"❗ **Not An Admin in The Channel**\nI'm Not An Admin in The [channel](https://t.me/{input_str}). Add Me As A Admin In Order To Enable ForceSubscribe.", disable_web_page_preview=True)
+        except (UsernameNotOccupied, PeerIdInvalid):
+          message.reply_text(f"❗ **Invalid Channel Username.**")
+        except Exception as err:
+          message.reply_text(f"❗ **ERROR:** ```{err}```")
+    else:
+      if sql.fs_settings(chat_id):
+        message.reply_text(f"✅ **Force Subscribe is Enabled in This Chat.**\nFor This [Channel](https://t.me/{sql.fs_settings(chat_id).channel})", disable_web_page_preview=True)
+      else:
+        message.reply_text("❌ **Force Subscribe is Disabled in This Chat.**")
+  else:
+      message.reply_text("❗ **Group Creator Required**\nYou Have To Be The Group Creator To Do That.")
 
 
 
@@ -37,9 +89,6 @@ Note: Only creator of the group can setup me and i will not allow force subscrib
  
 <b>Commmands</b>
  - /forcesubscribe - To get the current settings.
- - /forcesubscribe no/off/disable - To turn of ForceSubscribe.
- - /forcesubscribe {channel username} - To turn on and setup the channel.
- - /forcesubscribe clear - To unmute all members who muted by me.
 Note: /forcesub is an alias of /forcesubscribe
  
 """
