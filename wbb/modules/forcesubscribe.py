@@ -2,6 +2,7 @@ import logging
 import time
 
 from pyrogram import Client
+from wbb.Config import Config
 from wbb.core.decorators.errors import capture_err
 from pyrogram.errors import RPCError
 from pyrogram.errors.exceptions.bad_request_400 import UserNotParticipant, UsernameNotOccupied, ChatAdminRequired, PeerIdInvalid
