@@ -50,3 +50,6 @@ html2text
 TgCrypto
 sqlalchemy==1.4.23
 psycopg2-binary
+
+python-decouple
+telethon==1.22.0
