@@ -21,6 +21,7 @@ SOFTWARE.
 print("[INFO]: INITIALIZING")
 import asyncio
 import logging
+import os
 import time
 from os import path
 from aiogram import Bot, Dispatcher, types
