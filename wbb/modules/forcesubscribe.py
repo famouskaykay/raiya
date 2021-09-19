@@ -28,7 +28,7 @@ from wbb import BOT_ID
 from wbb import db
 import time
 
-channel = xchannel.replace("@", "")
+
 async def get_user_join(id):
     ok = True
     try:
