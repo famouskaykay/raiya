@@ -38,7 +38,7 @@ async def get_user_join(id):
         ok = False
     return ok
 
-
+@Client.on(events.ChatAction())
 async def _(event):
     if on_join is False:
         return
@@ -46,7 +46,7 @@ async def _(event):
         user = await event.get_user()
         chat = await event.get_chat()
         title = chat.title if chat.title else "this chat"
-        pp = await app.get_participants(chat)
+        pp = await Client.get_participants(chat)
         count = len(pp)
         mention = f"[{get_display_name(user)}](tg://user?id={user.id})"
         name = user.first_name
@@ -72,7 +72,7 @@ async def _(event):
         await event.reply(msg, buttons=butt)
 
 
-@app.on(events.NewMessage(incoming=True))
+@Client.on(events.NewMessage(incoming=True))
 async def mute_on_msg(event):
     if event.is_private:
         return
@@ -85,19 +85,19 @@ async def mute_on_msg(event):
             return
         nm = temp.user.first_name
         try:
-            await BotzHub.edit_permissions(event.chat.id, event.sender_id, until_date=None, send_messages=False)
+            await Client.edit_permissions(event.chat.id, event.sender_id, until_date=None, send_messages=False)
         except Exception as e:
             print(str(e))
             return
         await event.reply(f"Hey {nm}, seems like you haven't joined our channel. Please join @{channel} and then press the button below to unmute yourself!", buttons=[[Button.url("Channel", url=f"https://t.me/{channel}")], [Button.inline("UnMute Me", data=f"unmute_{event.sender_id}")]])
 
 
-@app.on(events.callbackquery.CallbackQuery(data=re.compile(b"unmute_(.*)")))
+@Client.on(events.callbackquery.CallbackQuery(data=re.compile(b"unmute_(.*)")))
 async def _(event):
     uid = int(event.data_match.group(1).decode("UTF-8"))
     if uid == event.sender_id:
         x = await get_user_join(uid)
-        nm = (await app(GetFullUserRequest(uid))).user.first_name
+        nm = (await Client(GetFullUserRequest(uid))).user.first_name
         if x is False:
             await event.answer(f"You haven't joined @{channel} yet!", cache_time=0, alert=True)
         elif x is True:
@@ -113,7 +113,7 @@ async def _(event):
         await event.answer("You are an old member and can speak freely! This isn't for you!", cache_time=0, alert=True)
 
 print("ForceSub Bot has started.\nDo visit @BotzHub!")
-app.run_until_disconnected()
+Client.run_until_disconnected()
 
 __HELP__ = """
 <b>ForceSubscribe:</b>
