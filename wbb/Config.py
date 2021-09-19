@@ -4,7 +4,7 @@ from envparse import env
 from GreysonBot import LOGGER
 
 DEFAULTS = {
-    "LOAD_MODULES": True,
+    "LOAD_MODULES": False,
 }
 
 def get_str_key(name, required=False):
