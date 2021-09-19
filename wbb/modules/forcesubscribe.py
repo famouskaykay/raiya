@@ -1,20 +1,17 @@
 import logging
 import time
-import asyncio
-import string
-import random
-from telethon.utils import get_display_name
-import re
-from telethon import TelegramClient, events, Button
-from decouple import config
-from telethon.tl.functions.users import GetFullUserRequest
-from telethon.errors.rpcerrorlist import UserNotParticipantError
-from telethon.tl.functions.channels import GetParticipantRequest
 
+from pyrogram.errors.exceptions.bad_request_400 import (
+    ChatAdminRequired,
+    PeerIdInvalid,
+    UsernameNotOccupied,
+    UserNotParticipant,
+)
+import asyncio
+import re
 from pyrogram import Client
 from wbb.core.decorators.errors import capture_err
 from pyrogram.errors import RPCError
-from pyrogram.errors.exceptions.bad_request_400 import UserNotParticipant, UsernameNotOccupied, ChatAdminRequired, PeerIdInvalid
 from pyrogram import filters
 from wbb.utils.filter_groups import chatbot_group
 
@@ -22,110 +19,190 @@ from pyrogram.types import (Chat, ChatPermissions,
                             InlineKeyboardButton,
                             InlineKeyboardMarkup, Message, User)
 from wbb import SUDOERS
-
+from wbb.sql.sql_extended import forceSubscribe_sql as sql
 from wbb import app
 from wbb import BOT_ID
 from wbb import db
 import time
 
 
-async def get_user_join(id):
-    ok = True
-    try:
-        await app(GetParticipantRequest(channel=channel, participant=id))
-        ok = True
-    except UserNotParticipantError:
-        ok = False
-    return ok
+logging.basicConfig(level=logging.INFO)
 
-@Client.on(events.ChatAction())
-async def _(event):
-    if on_join is False:
-        return
-    if event.user_joined or event.user_added:
-        user = await event.get_user()
-        chat = await event.get_chat()
-        title = chat.title if chat.title else "this chat"
-        pp = await Client.get_participants(chat)
-        count = len(pp)
-        mention = f"[{get_display_name(user)}](tg://user?id={user.id})"
-        name = user.first_name
-        last = user.last_name
-        if last:
-            fullname = f"{name} {last}"
+static_data_filter = filters.create(
+    lambda _, __, query: query.data == "onUnMuteRequest"
+)
+
+
+app.on_callback_query(static_data_filter)
+def _onUnMuteRequest(client, cb):
+    user_id = cb.from_user.id
+    chat_id = cb.message.chat.id
+    chat_db = sql.fs_settings(chat_id)
+    if chat_db:
+        channel = chat_db.channel
+        chat_member = client.get_chat_member(chat_id, user_id)
+        if chat_member.restricted_by:
+            if chat_member.restricted_by.id == (client.get_me()).id:
+                try:
+                    client.get_chat_member(channel, user_id)
+                    client.unban_chat_member(chat_id, user_id)
+                    cb.message.delete()
+                    # if cb.message.reply_to_message.from_user.id == user_id:
+                    # cb.message.delete()
+                except UserNotParticipant:
+                    client.answer_callback_query(
+                        cb.id,
+                        text=f"❗ Join our @{channel} channel and press 'UnMute Me' button.",
+                        show_alert=True,
+                    )
+            else:
+                client.answer_callback_query(
+                    cb.id,
+                    text="❗ You have been muted by admins due to some other reason.",
+                    show_alert=True,
+                )
         else:
-            fullname = name
-        uu = user.username
-        if uu:
-            username = f"@{uu}"
-        else:
-            username = mention
-        x = await get_user_join(user.id)
-        if x is True:
-            msg = welcome_msg.format(mention=mention, title=title, fullname=fullname, username=username, name=name, last=last, channel=f"@{channel}")
-            butt = [Button.url("Channel", url=f"https://t.me/{channel}")]
-        else:
-            msg = welcome_not_joined.format(mention=mention, title=title, fullname=fullname, username=username, name=name, last=last, channel=f"@{channel}")
-            butt = [Button.url("Channel", url=f"https://t.me/{channel}"), Button.inline("UnMute Me", data=f"unmute_{user.id}")]
-            await app.edit_permissions(event.chat.id, user.id, until_date=None, send_messages=False)
-        
-        await event.reply(msg, buttons=butt)
+            if (
+                not client.get_chat_member(chat_id, (client.get_me()).id).status
+                == "administrator"
+            ):
+                client.send_message(
+                    chat_id,
+                    f"❗ **{cb.from_user.mention} is trying to UnMute himself but i can't unmute him because i am not an admin in this chat add me as admin again.**\n__#Leaving this chat...__",
+                )
+
+            else:
+                client.answer_callback_query(
+                    cb.id,
+                    text="❗ Warning! Don't press the button when you cn talk.",
+                    show_alert=True,
+                )
 
 
-@Client.on(events.NewMessage(incoming=True))
-async def mute_on_msg(event):
-    if event.is_private:
-        return
-    if on_new_msg is False:
-        return
-    x = await get_user_join(event.sender_id)
-    temp = await app(GetFullUserRequest(event.sender_id))
-    if x is False:
-        if temp.user.bot:
-            return
-        nm = temp.user.first_name
-        try:
-            await Client.edit_permissions(event.chat.id, event.sender_id, until_date=None, send_messages=False)
-        except Exception as e:
-            print(str(e))
-            return
-        await event.reply(f"Hey {nm}, seems like you haven't joined our channel. Please join @{channel} and then press the button below to unmute yourself!", buttons=[[Button.url("Channel", url=f"https://t.me/{channel}")], [Button.inline("UnMute Me", data=f"unmute_{event.sender_id}")]])
-
-
-@Client.on(events.callbackquery.CallbackQuery(data=re.compile(b"unmute_(.*)")))
-async def _(event):
-    uid = int(event.data_match.group(1).decode("UTF-8"))
-    if uid == event.sender_id:
-        x = await get_user_join(uid)
-        nm = (await Client(GetFullUserRequest(uid))).user.first_name
-        if x is False:
-            await event.answer(f"You haven't joined @{channel} yet!", cache_time=0, alert=True)
-        elif x is True:
+@app.on_message(filters.text & ~filters.private & ~filters.edited, group=1)
+def _check_member(client, message):
+    chat_id = message.chat.id
+    chat_db = sql.fs_settings(chat_id)
+    if chat_db:
+        user_id = message.from_user.id
+        if (
+            not client.get_chat_member(chat_id, user_id).status
+            in ("administrator", "creator")
+            and not user_id in SUDOERS
+        ):
+            channel = chat_db.channel
             try:
-                await app.edit_permissions(event.chat.id, uid, until_date=None, send_messages=True)
-            except Exception as e:
-                print(str(e))
-                return
-            msg = f"Welcome to {(await event.get_chat()).title}, {nm}!\nGood to see you here!"
-            butt = [Button.url("Channel", url=f"https://t.me/{channel}")]
-            await event.edit(msg, buttons=butt)
-    else:
-        await event.answer("You are an old member and can speak freely! This isn't for you!", cache_time=0, alert=True)
+                client.get_chat_member(channel, user_id)
+            except UserNotParticipant:
+                try:
+                    sent_message = message.reply_text(
+                        "Welcome {} 🙏 \n **You havent joined our @{} Channel yet** 😭 \n \nPlease Join [Our Channel](https://t.me/{}) and hit the **UNMUTE ME** Button. \n \n ".format(
+                            message.from_user.mention, channel, channel
+                        ),
+                        disable_web_page_preview=True,
+                        reply_markup=InlineKeyboardMarkup(
+                            [
+                                [
+                                    InlineKeyboardButton(
+                                        "Join Channel",
+                                        url="https://t.me/{}".format(channel),
+                                    )
+                                ],
+                                [
+                                    InlineKeyboardButton(
+                                        "UnMute Me", callback_data="onUnMuteRequest"
+                                    )
+                                ],
+                            ]
+                        ),
+                    )
+                    client.restrict_chat_member(
+                        chat_id, user_id, ChatPermissions(can_send_messages=False)
+                    )
+                except ChatAdminRequired:
+                    sent_message.edit(
+                        "❗ **xkaykay is not admin here..**\n__Give me ban permissions and retry.. \n#Ending FSub...__"
+                    )
 
-print("ForceSub Bot has started.\nDo visit @BotzHub!")
-Client.run_until_disconnected()
+            except ChatAdminRequired:
+                client.send_message(
+                    chat_id,
+                    text=f"❗ **I not an admin of @{channel} channel.**\n__Give me admin of that channel and retry.\n#Ending FSub...__",
+                )
+
+
+@app.on_message(filters.command(["forcesubscribe", "fsub"]) & ~filters.private)
+def config(client, message):
+    user = client.get_chat_member(message.chat.id, message.from_user.id)
+    if user.status is "creator" or user.user.id in SUDOERS:
+        chat_id = message.chat.id
+        if len(message.command) > 1:
+            input_str = message.command[1]
+            input_str = input_str.replace("@", "")
+            if input_str.lower() in ("off", "no", "disable"):
+                sql.disapprove(chat_id)
+                message.reply_text("❌ **Force Subscribe is Disabled Successfully.**")
+            elif input_str.lower() in ("clear"):
+                sent_message = message.reply_text(
+                    "**Unmuting all members who are muted by me...**"
+                )
+                try:
+                    for chat_member in client.get_chat_members(
+                        message.chat.id, filter="restricted"
+                    ):
+                        if chat_member.restricted_by.id == (client.get_me()).id:
+                            client.unban_chat_member(chat_id, chat_member.user.id)
+                            time.sleep(1)
+                    sent_message.edit("✅ **UnMuted all members who are muted by me.**")
+                except ChatAdminRequired:
+                    sent_message.edit(
+                        "❗ **I am not an admin in this chat.**\n__I can't unmute members because i am not an admin in this chat make me admin with ban user permission.__"
+                    )
+            else:
+                try:
+                    client.get_chat_member(input_str, "me")
+                    sql.add_channel(chat_id, input_str)
+                    message.reply_text(
+                        f"✅ **Force Subscribe is Enabled**\n__Force Subscribe is enabled, all the group members have to subscribe this [channel](https://t.me/{input_str}) in order to send messages in this group.__",
+                        disable_web_page_preview=True,
+                    )
+                except UserNotParticipant:
+                    message.reply_text(
+                        f"❗ **Not an Admin in the Channel**\n__I am not an admin in the [channel](https://t.me/{input_str}). Add me as a admin in order to enable ForceSubscribe.__",
+                        disable_web_page_preview=True,
+                    )
+                except (UsernameNotOccupied, PeerIdInvalid):
+                    message.reply_text(f"❗ **Invalid Channel Username.**")
+                except Exception as err:
+                    message.reply_text(f"❗ **ERROR:** ```{err}```")
+        else:
+            if sql.fs_settings(chat_id):
+                message.reply_text(
+                    f"✅ **Force Subscribe is enabled in this chat.**\n__For this [Channel](https://t.me/{sql.fs_settings(chat_id).channel})__",
+                    disable_web_page_preview=True,
+                )
+            else:
+                message.reply_text("❌ **Force Subscribe is disabled in this chat.**")
+    else:
+        message.reply_text(
+            "❗ **Group Creator Required**\n__You have to be the group creator to do that.__"
+        )
 
 __HELP__ = """
-<b>ForceSubscribe:</b>
-- xkaykay can mute members who are not subscribed your channel until they subscribe
-- When enabled I will mute unsubscribed members and show them a unmute button. When they pressed the button I will unmute them
-<b>Setup</b>
-1) First of all add me in the group as admin with ban users permission and in the channel as admin.
-Note: Only creator of the group can setup me and i will not allow force subscribe again if not done so.
+*Force Subscribe:*
+❍ Yone can mute members who are not subscribed your channel until they subscribe
+❍ When enabled I will mute unsubscribed members and show them a unmute button. When they pressed the button I will unmute them
+*Setup*
+*Only creator*
+❍ Add me in your group as admin
+❍ Add me in your channel as admin 
  
-<b>Commmands</b>
- - /forcesubscribe - To get the current settings.
-Note: /forcesub is an alias of /forcesubscribe
- 
+*Commmands*
+ ❍ /fsub {channel username} - To turn on and setup the channel.
+  💡Do this first...
+ ❍ /fsub - To get the current settings.
+ ❍ /fsub disable - To turn of ForceSubscribe..
+  💡If you disable fsub, you need to set again for working.. /fsub {channel username} 
+ ❍ /fsub clear - To unmute all members who muted by me.
 """
 __MODULE__ = "Force Subscribe "
