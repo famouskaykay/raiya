@@ -1,4 +1,4 @@
-import SUDOERS
+from wbb import SUDOERS
 from envparse import env
 from GreysonBot import LOGGER
 
