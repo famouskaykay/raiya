@@ -71,6 +71,12 @@ mongo_client = MongoClient(MONGO_DB_URI)
 db = mongo_client.wbb
 POSTGRESS_URL = MONGO_DB_URI
 
+
+URL = os.environ.get("URL", "")  
+DB_URI = os.environ.get("DATABASE_URL")
+URL = Config.URL
+DB_URI = Config.SQLALCHEMY_DATABASE_URI
+
 async def load_sudoers():
     global SUDOERS
     print("[INFO]: LOADING SUDOERS")
@@ -128,6 +134,8 @@ USERBOT_USERNAME = ""
 USERBOT_DC_ID = 0
 USERBOT_MENTION = ""
 USERBOT_BOT_CHAT_COMMON = []
+
+
 
 
 def get_info(app, app2):
