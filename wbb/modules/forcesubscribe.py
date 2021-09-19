@@ -38,7 +38,7 @@ async def get_user_join(id):
         ok = False
     return ok
 
-@app.on(events.ChatAction())
+
 async def _(event):
     if on_join is False:
         return
