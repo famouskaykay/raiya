@@ -333,7 +333,6 @@ async def aspirer(client, message):
     except CFError:
         return
 
-
 @app.on_message(
     filters.text
     & filters.reply
