@@ -1,3 +1,5 @@
+#whisper support
+
 import json
 try:
     with open('data.json') as f:
