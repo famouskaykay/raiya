@@ -3,8 +3,10 @@ from telethon import events, TelegramClient, Button
 import logging
 from telethon.tl.functions.users import GetFullUserRequest as us
 import os
+from wbb import app
 
 db = {}
+
 @app.on(events.InlineQuery())
 async def die(event):
     if len(event.text) != 0:
