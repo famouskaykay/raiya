@@ -1,13 +1,6 @@
 import codecs
 import pickle
 from typing import Dict, List, Union
-import os
-import threading
-from sqlalchemy import create_engine
-from sqlalchemy import Column, TEXT, Numeric
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, scoped_session
-
 from wbb import db
 
 """
@@ -15,54 +8,6 @@ SOME THINGS ARE FUCKED UP HERE, LIKE TOGGLEABLES HAVE THEIR OWN COLLECTION
 (SHOULD FIX IT WITH SOMETHING LIKE TOGGLEDB, BUT I WON'T, AS IT WILL TAKE
 TOO MUCH TIME AND WILL BE BAD FOR ALREADY STORED DATA)
 """
-
-
-if bool(os.environ.get("ENV", False)):
-    from sample_config import Config
-else:
-    from config import Config
-    
-
-    
-def start() -> scoped_session:
-    engine = create_engine(Config.MONGO_URL, client_encoding="utf8")
-    BASE.metadata.bind = engine
-    BASE.metadata.create_all(engine)
-    return scoped_session(sessionmaker(bind=engine, autoflush=False))
-    
-BASE = declarative_base()
-SESSION = start()
-
-INSERTION_LOCK = threading.RLock()
-
-class Broadcast(BASE):
-    __tablename__ = "broadcast"
-    id = Column(Numeric, primary_key=True)
-    user_name = Column(TEXT)
-
-    def __init__(self, id, user_name):
-        self.id = id
-        self.user_name = user_name
-
-Broadcast.__table__.create(checkfirst=True)
-
-async def add_user(id, user_name):
-    with INSERTION_LOCK:
-        msg = SESSION.query(Broadcast).get(id)
-        if not msg:
-            usr = Broadcast(id, user_name)
-            SESSION.add(usr)
-            SESSION.commit()
-        else:
-            pass
-
-async def query_msg():
-    try:
-        query = SESSION.query(Broadcast.id).order_by(Broadcast.id)
-        return query
-    finally:
-        SESSION.close()
-
 notesdb = db.notes
 filtersdb = db.filters
 warnsdb = db.warns
