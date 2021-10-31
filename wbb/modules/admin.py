@@ -30,6 +30,7 @@ __HELP__ = """/ban - Ban A User
 /demote - Demote A Member
 /pin - Pin A Message
 /mute - Mute A User
+/dmute - delete the replied message muting its sender
 /tmute - Mute A User For Specific Time
 /unmute - Unmute A User
 /ban_ghosts - Ban Deleted Accounts
@@ -197,6 +198,7 @@ async def kickFunc(_, message: Message):
 
 
 # Ban members
+
 
 
 @app.on_message(
@@ -387,7 +389,7 @@ async def pin(_, message: Message):
 
 
 @app.on_message(
-    filters.command(["mute", "tmute"])
+    filters.command(["mute", "tmute", "dmute"])
     & ~filters.edited
     & ~filters.private
 )
@@ -415,6 +417,8 @@ async def mute(_, message: Message):
         f"**Muted User:** {mention}\n"
         f"**Muted By:** {message.from_user.mention if message.from_user else 'Anon'}\n"
     )
+    if message.command[0][0] == "d":
+        await message.reply_to_message.delete()
     if message.command[0] == "tmute":
         split = reason.split(None, 1)
         time_value = split[0]
